@@ -10,7 +10,7 @@ import confetti from "canvas-confetti";
 // Dynamic import of the Price Path Chart to prevent SSR errors
 const ProbabilityChart = dynamic(() => import("@/components/ProbabilityChart"), { ssr: false });
 
-import { useBinancePrice } from "@/hooks/useBinance";
+import { useBinancePrice, useBinanceKlines } from "@/hooks/useBinance";
 
 interface ActivePosition {
   id: string;
@@ -42,6 +42,7 @@ interface ChartPoint {
 export default function TradePage() {
   // 1. LIVE DATA - Custom Binance Hook
   const { price: btcPrice, priceDirection } = useBinancePrice();
+  const { candles: binanceCandles } = useBinanceKlines("1m", 18);
 
   // 2. TIMEFRAME & DYNAMIC 5-MIN WINDOW STATE
   const [timeWindow, setTimeWindow] = useState<{ start: number; end: number; timeLeft: number }>({
@@ -407,20 +408,20 @@ export default function TradePage() {
         {/* 4. PRICE CHART CARD */}
         <div className="relative">
           {/* Floating executed trades indicators on the left margin */}
-          <div className="absolute left-2 top-8 z-10 flex flex-col gap-2 pointer-events-none">
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-[#EAFBF0] text-[#00C853] text-[9px] font-bold px-2 py-0.5 rounded-md border border-[#CFF8DD] shadow-xs">
+          <div className="absolute left-2 top-8 z-10 flex flex-col gap-1.5 pointer-events-none select-none">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-[#00C853] text-[9.5px] font-extrabold">
               + $50
             </motion.div>
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="bg-[#FFEBEF] text-[#FF3B57] text-[9px] font-bold px-2 py-0.5 rounded-md border border-[#FFD2DA] shadow-xs">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="text-[#FF3B57] text-[9.5px] font-extrabold">
               + $5
             </motion.div>
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5 }} className="bg-[#EAFBF0] text-[#00C853] text-[9px] font-bold px-2 py-0.5 rounded-md border border-[#CFF8DD] shadow-xs">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5 }} className="text-[#00C853] text-[9.5px] font-extrabold">
               + $100
             </motion.div>
           </div>
 
           {/* Actual Price path chart */}
-          <ProbabilityChart data={chartPoints} loading={false} error={null} side={selectedSide} referencePrice={referencePrice} chartStyle={chartStyle} />
+          <ProbabilityChart data={chartPoints} loading={false} error={null} side={selectedSide} referencePrice={referencePrice} chartStyle={chartStyle} candles={binanceCandles} />
         </div>
 
         {/* 5. INTERVAL TIME PILLS (Replicating capsules row below chart) */}
@@ -428,12 +429,12 @@ export default function TradePage() {
           {/* Pill 1 */}
           <button
             onClick={() => setSelectedPill("5m")}
-            className="relative px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer z-10"
+            className="relative px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer z-10"
           >
             {selectedPill === "5m" && (
               <motion.div
                 layoutId="active-interval-pill"
-                className="absolute inset-0 bg-[#ECECFF] border border-[#D5D0FF] rounded-full -z-10"
+                className="absolute inset-0 bg-[#ECECFF] border border-[#D5D0FF] rounded-lg -z-10"
                 transition={{ type: "spring", stiffness: 380, damping: 30 }}
               />
             )}
@@ -446,12 +447,12 @@ export default function TradePage() {
           {/* Pill 2 */}
           <button
             onClick={() => setSelectedPill("15m")}
-            className="relative px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer z-10"
+            className="relative px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer z-10"
           >
             {selectedPill === "15m" && (
               <motion.div
                 layoutId="active-interval-pill"
-                className="absolute inset-0 bg-[#ECECFF] border border-[#D5D0FF] rounded-full -z-10"
+                className="absolute inset-0 bg-[#ECECFF] border border-[#D5D0FF] rounded-lg -z-10"
                 transition={{ type: "spring", stiffness: 380, damping: 30 }}
               />
             )}
@@ -464,12 +465,12 @@ export default function TradePage() {
           {/* Pill 3 */}
           <button
             onClick={() => setSelectedPill("30m")}
-            className="relative px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer z-10"
+            className="relative px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer z-10"
           >
             {selectedPill === "30m" && (
               <motion.div
                 layoutId="active-interval-pill"
-                className="absolute inset-0 bg-[#ECECFF] border border-[#D5D0FF] rounded-full -z-10"
+                className="absolute inset-0 bg-[#ECECFF] border border-[#D5D0FF] rounded-lg -z-10"
                 transition={{ type: "spring", stiffness: 380, damping: 30 }}
               />
             )}
@@ -482,12 +483,12 @@ export default function TradePage() {
           {/* Pill 4 */}
           <button
             onClick={() => setSelectedPill("1h")}
-            className="relative px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer z-10"
+            className="relative px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer z-10"
           >
             {selectedPill === "1h" && (
               <motion.div
                 layoutId="active-interval-pill"
-                className="absolute inset-0 bg-[#ECECFF] border border-[#D5D0FF] rounded-full -z-10"
+                className="absolute inset-0 bg-[#ECECFF] border border-[#D5D0FF] rounded-lg -z-10"
                 transition={{ type: "spring", stiffness: 380, damping: 30 }}
               />
             )}
@@ -498,17 +499,17 @@ export default function TradePage() {
           </button>
 
           {/* Chart Style Switcher (replaces old icons right) */}
-          <div className="flex bg-gray-50 border border-brand-border p-1 rounded-full ml-auto select-none">
+          <div className="flex bg-gray-50 border border-brand-border p-1 rounded-lg ml-auto select-none">
             {/* Style 1: Line/Area */}
             <button
               onClick={() => setChartStyle("line")}
-              className="relative p-1.5 rounded-full transition-all cursor-pointer flex items-center justify-center"
+              className="relative p-1.5 rounded-lg transition-all cursor-pointer flex items-center justify-center"
               aria-label="Area Line Chart"
             >
               {chartStyle === "line" && (
                 <motion.div
                   layoutId="active-chart-style"
-                  className="absolute inset-0 bg-[#EBF3FF] border border-[#D0E5FF] rounded-full"
+                  className="absolute inset-0 bg-[#EBF3FF] border border-[#D0E5FF] rounded-lg"
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
@@ -522,13 +523,13 @@ export default function TradePage() {
             {/* Style 2: Bitcoin price deviation */}
             <button
               onClick={() => setChartStyle("deviation")}
-              className="relative p-1.5 rounded-full transition-all cursor-pointer px-2.5 flex items-center justify-center"
+              className="relative p-1.5 rounded-lg transition-all cursor-pointer px-2.5 flex items-center justify-center"
               aria-label="Bitcoin Ticker Deviation"
             >
               {chartStyle === "deviation" && (
                 <motion.div
                   layoutId="active-chart-style"
-                  className="absolute inset-0 bg-[#EBF3FF] border border-[#D0E5FF] rounded-full"
+                  className="absolute inset-0 bg-[#EBF3FF] border border-[#D0E5FF] rounded-lg"
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
@@ -540,13 +541,13 @@ export default function TradePage() {
             {/* Style 3: Candlesticks */}
             <button
               onClick={() => setChartStyle("candles")}
-              className="relative p-1.5 rounded-full transition-all cursor-pointer flex items-center justify-center"
+              className="relative p-1.5 rounded-lg transition-all cursor-pointer flex items-center justify-center"
               aria-label="Candlestick Chart"
             >
               {chartStyle === "candles" && (
                 <motion.div
                   layoutId="active-chart-style"
-                  className="absolute inset-0 bg-[#EBF3FF] border border-[#D0E5FF] rounded-full"
+                  className="absolute inset-0 bg-[#EBF3FF] border border-[#D0E5FF] rounded-lg"
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
@@ -565,15 +566,15 @@ export default function TradePage() {
         {/* 7. UP/DOWN CENTS BUTTONS (Replicating the YES/NO buy panel of screenshot) */}
         <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-brand-border p-4 shadow-[0_-10px_30px_rgba(0,0,0,0.06)] rounded-t-2xl md:relative md:bottom-auto md:left-auto md:right-auto md:z-auto md:border md:rounded-xl md:p-5 md:shadow-none flex flex-col gap-4">
           <div className="flex items-center gap-3">
-            <div className="relative flex bg-gray-50 border border-brand-border p-1 rounded-2xl w-full select-none">
+            <div className="relative flex bg-gray-50 border border-brand-border p-1 rounded-lg w-full select-none">
               <button
                 onClick={() => setSelectedSide("YES")}
-                className="relative flex-1 py-3 rounded-xl text-sm font-bold tracking-wider cursor-pointer flex items-center justify-center gap-1.5 z-10 transition-colors duration-300"
+                className="relative flex-1 py-3 rounded-lg text-sm font-bold tracking-wider cursor-pointer flex items-center justify-center gap-1.5 z-10 transition-colors duration-300"
               >
                 {selectedSide === "YES" && (
                   <motion.div
                     layoutId="active-trade-side"
-                    className="absolute inset-0 bg-[#2F80ED] rounded-xl -z-10 shadow-md shadow-[#2F80ED]/15"
+                    className="absolute inset-0 bg-[#2F80ED] rounded-lg -z-10 shadow-md shadow-[#2F80ED]/15"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -584,12 +585,12 @@ export default function TradePage() {
 
               <button
                 onClick={() => setSelectedSide("NO")}
-                className="relative flex-1 py-3 rounded-xl text-sm font-bold tracking-wider cursor-pointer flex items-center justify-center gap-1.5 z-10 transition-colors duration-300"
+                className="relative flex-1 py-3 rounded-lg text-sm font-bold tracking-wider cursor-pointer flex items-center justify-center gap-1.5 z-10 transition-colors duration-300"
               >
                 {selectedSide === "NO" && (
                   <motion.div
                     layoutId="active-trade-side"
-                    className="absolute inset-0 bg-[#FF3B57] rounded-xl -z-10 shadow-md shadow-[#FF3B57]/15"
+                    className="absolute inset-0 bg-[#FF3B57] rounded-lg -z-10 shadow-md shadow-[#FF3B57]/15"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}

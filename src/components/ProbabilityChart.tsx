@@ -7,6 +7,14 @@ interface PricePoint {
   value: number; // BTC Price in USD
 }
 
+export interface ChartCandle {
+  time: number; // UNIX timestamp in seconds
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+}
+
 interface ProbabilityChartProps {
   data: PricePoint[];
   loading: boolean;
@@ -14,9 +22,10 @@ interface ProbabilityChartProps {
   side: "YES" | "NO"; // Color theme based on selected side
   referencePrice: number; // Strike Price to Beat
   chartStyle: "line" | "deviation" | "candles";
+  candles?: ChartCandle[];
 }
 
-export default function ProbabilityChart({ data, loading, error, side, referencePrice, chartStyle }: ProbabilityChartProps) {
+export default function ProbabilityChart({ data, loading, error, side, referencePrice, chartStyle, candles = [] }: ProbabilityChartProps) {
   // SVG Canvas dimensions
   const width = 500;
   const height = 240;
@@ -54,7 +63,7 @@ export default function ProbabilityChart({ data, loading, error, side, reference
   const strokeColor = side === "YES" ? "#2F80ED" : "#FF3B57";
   const gradientId = `chart-gradient-${side}`;
 
-  // 1. CALCULATE BOUNDARIES & COORDINATES BASED ON CHART STYLE
+  // 1. CALCULATE BOUNDARIES & COORDINATES FOR DEVIATION STYLE
   if (chartStyle === "deviation") {
     // DEV MODE: Maps percentage deviation relative to locked referencePrice
     const devPoints = data.map((d) => {
@@ -171,55 +180,61 @@ export default function ProbabilityChart({ data, loading, error, side, reference
     );
   }
 
-  // Common boundary check logic for Spot line and Candlestick modes
-  let minPrice = Math.min(...data.map((d) => d.value));
-  let maxPrice = Math.max(...data.map((d) => d.value));
-
-  if (referencePrice > 0) {
-    minPrice = Math.min(minPrice, referencePrice);
-    maxPrice = Math.max(maxPrice, referencePrice);
-  }
-
-  const priceDelta = maxPrice - minPrice;
-  const marginOffset = priceDelta * 0.15 || 5.0;
-  const yMin = minPrice - marginOffset;
-  const yMax = maxPrice + marginOffset;
-  const yRange = yMax - yMin;
-
-  const targetY = padTop + chartHeight - ((referencePrice - yMin) / yRange) * chartHeight;
-
-  // Gridlines
-  const gridLines = [0, 0.33, 0.66, 1.0].map((ratio) => {
-    const y = padTop + ratio * chartHeight;
-    const priceVal = yMax - ratio * yRange;
-    return { y, priceVal };
-  });
-
-  // 2. CANDLESTICK RENDERING MODE
+  // 2. CANDLESTICK RENDERING MODE (Using real historical candles boundary check)
   if (chartStyle === "candles") {
-    // Group ticks into 18 candlesticks
-    const numCandles = Math.min(18, data.length);
-    const groupSize = Math.max(1, Math.floor(data.length / numCandles));
-    const candles: { open: number; close: number; high: number; low: number; x: number }[] = [];
+    // If no real candles supplied, fall back to mockup candles from data ticks
+    const displayCandles: ChartCandle[] = [];
+    if (candles && candles.length > 0) {
+      displayCandles.push(...candles);
+    } else {
+      // Mock candles from ticks
+      const numCandles = Math.min(18, data.length);
+      const groupSize = Math.max(1, Math.floor(data.length / numCandles));
+      for (let c = 0; c < numCandles; c++) {
+        const startIdx = c * groupSize;
+        const endIdx = Math.min(data.length, (c + 1) * groupSize);
+        const groupData = data.slice(startIdx, endIdx);
+        if (groupData.length === 0) continue;
 
-    for (let c = 0; c < numCandles; c++) {
-      const startIdx = c * groupSize;
-      const endIdx = Math.min(data.length, (c + 1) * groupSize);
-      const groupData = data.slice(startIdx, endIdx);
-      if (groupData.length === 0) continue;
-
-      const open = groupData[0].value;
-      const close = groupData[groupData.length - 1].value;
-      const values = groupData.map((d) => d.value);
-      const high = Math.max(...values);
-      const low = Math.min(...values);
-
-      // Centered X coordinate
-      const x = padLeft + (c / (numCandles - 1)) * chartWidth;
-      candles.push({ open, close, high, low, x });
+        const open = groupData[0].value;
+        const close = groupData[groupData.length - 1].value;
+        const values = groupData.map((d) => d.value);
+        let high = Math.max(...values);
+        let low = Math.min(...values);
+        if (high === low) {
+          high += 1.0;
+          low -= 1.0;
+        }
+        displayCandles.push({ time: groupData[0].time, open, close, high, low });
+      }
     }
 
-    const candleWidth = (chartWidth / numCandles) * 0.55;
+    // Boundary calculation for candles Specifically
+    let minPrice = Math.min(...displayCandles.map((c) => c.low));
+    let maxPrice = Math.max(...displayCandles.map((c) => c.high));
+
+    if (referencePrice > 0) {
+      minPrice = Math.min(minPrice, referencePrice);
+      maxPrice = Math.max(maxPrice, referencePrice);
+    }
+
+    const priceDelta = maxPrice - minPrice;
+    const marginOffset = priceDelta * 0.15 || 5.0;
+    const yMin = minPrice - marginOffset;
+    const yMax = maxPrice + marginOffset;
+    const yRange = yMax - yMin;
+
+    const targetY = padTop + chartHeight - ((referencePrice - yMin) / yRange) * chartHeight;
+
+    // Gridlines
+    const gridLines = [0, 0.33, 0.66, 1.0].map((ratio) => {
+      const y = padTop + ratio * chartHeight;
+      const priceVal = yMax - ratio * yRange;
+      return { y, priceVal };
+    });
+
+    const numCandles = displayCandles.length;
+    const candleWidth = numCandles > 0 ? (chartWidth / numCandles) * 0.55 : 10;
 
     return (
       <div className="relative w-full h-[240px] bg-white overflow-hidden rounded-xl border border-brand-border p-2">
@@ -261,10 +276,13 @@ export default function ProbabilityChart({ data, loading, error, side, reference
           )}
 
           {/* Render individual candlesticks */}
-          {candles.map((candle, idx) => {
+          {displayCandles.map((candle, idx) => {
             const isBullish = candle.close >= candle.open;
             const color = isBullish ? "#00C853" : "#FF3B57";
             
+            // X center coordinate for candle
+            const x = padLeft + (idx / (numCandles - 1)) * chartWidth;
+
             // Map OHLC to SVG coordinates
             const wickYHigh = padTop + chartHeight - ((candle.high - yMin) / yRange) * chartHeight;
             const wickYLow = padTop + chartHeight - ((candle.low - yMin) / yRange) * chartHeight;
@@ -273,22 +291,22 @@ export default function ProbabilityChart({ data, loading, error, side, reference
             const bodyYClose = padTop + chartHeight - ((candle.close - yMin) / yRange) * chartHeight;
             
             const bodyY = Math.min(bodyYOpen, bodyYClose);
-            const bodyHeight = Math.max(2, Math.abs(bodyYOpen - bodyYClose));
+            const bodyHeight = Math.max(2.5, Math.abs(bodyYOpen - bodyYClose));
 
             return (
               <g key={idx}>
                 {/* Wick line */}
-                <line x1={candle.x} y1={wickYLow} x2={candle.x} y2={wickYHigh} stroke={color} strokeWidth={1.5} />
+                <line x1={x} y1={wickYLow} x2={x} y2={wickYHigh} stroke={color} strokeWidth={1.5} />
                 {/* Candle body */}
                 <rect
-                  x={candle.x - candleWidth / 2}
+                  x={x - candleWidth / 2}
                   y={bodyY}
                   width={candleWidth}
                   height={bodyHeight}
                   fill={isBullish ? "none" : color}
                   stroke={color}
                   strokeWidth={1.5}
-                  rx={1}
+                  rx={0.5}
                 />
               </g>
             );
@@ -299,6 +317,29 @@ export default function ProbabilityChart({ data, loading, error, side, reference
   }
 
   // 3. STANDARD AREA/LINE MODE (default)
+  let minPrice = Math.min(...data.map((d) => d.value));
+  let maxPrice = Math.max(...data.map((d) => d.value));
+
+  if (referencePrice > 0) {
+    minPrice = Math.min(minPrice, referencePrice);
+    maxPrice = Math.max(maxPrice, referencePrice);
+  }
+
+  const priceDelta = maxPrice - minPrice;
+  const marginOffset = priceDelta * 0.15 || 5.0;
+  const yMin = minPrice - marginOffset;
+  const yMax = maxPrice + marginOffset;
+  const yRange = yMax - yMin;
+
+  const targetY = padTop + chartHeight - ((referencePrice - yMin) / yRange) * chartHeight;
+
+  // Gridlines
+  const gridLines = [0, 0.33, 0.66, 1.0].map((ratio) => {
+    const y = padTop + ratio * chartHeight;
+    const priceVal = yMax - ratio * yRange;
+    return { y, priceVal };
+  });
+
   const points = data.map((d, i) => {
     const x = padLeft + (i / (data.length - 1)) * chartWidth;
     const y = padTop + chartHeight - ((d.value - yMin) / yRange) * chartHeight;
