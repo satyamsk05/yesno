@@ -31,14 +31,16 @@ export default function FloatingTradesFeed() {
     const spawnTick = () => {
       const id = ++counterRef.current;
       const isUp = Math.random() > 0.45;
-      // Keep at most 1 active at a time so they never overlap
-      setTicks([{ id, amount: randomAmount(), isUp }]);
+      // Allow up to 4 ticks at once — they spawn at different times so
+      // each is naturally at a different height in its upward journey.
+      setTicks((prev) => [...prev.slice(-3), { id, amount: randomAmount(), isUp }]);
 
-      const nextIn = randomInterval(1200, 2800);
+      // Spawn next tick every 700–1400ms — fast enough to have 2-3 in flight
+      const nextIn = randomInterval(700, 1400);
       timeoutRef.current = setTimeout(spawnTick, nextIn);
     };
 
-    timeoutRef.current = setTimeout(spawnTick, 600);
+    timeoutRef.current = setTimeout(spawnTick, 400);
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
