@@ -554,8 +554,11 @@ export default function TradePage() {
                 />
               )}
               <span className={`relative z-10 block text-xs font-bold leading-none ${chartStyle === "candles" ? "text-[#2F80ED]" : "text-gray-400"}`}>
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 19V5m6 14V5M3 12h18" />
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="7" y1="3" x2="7" y2="21" stroke="#00C853" strokeWidth="2" strokeLinecap="round" />
+                  <rect x="5" y="7" width="4" height="9" rx="0.5" fill="#00C853" stroke="#00C853" strokeWidth="1" />
+                  <line x1="17" y1="3" x2="17" y2="21" stroke="#FF3B57" strokeWidth="2" strokeLinecap="round" />
+                  <rect x="15" y="9" width="4" height="8" rx="0.5" fill="#FF3B57" stroke="#FF3B57" strokeWidth="1" />
                 </svg>
               </span>
             </button>
