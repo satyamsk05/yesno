@@ -9,6 +9,7 @@ import confetti from "canvas-confetti";
 
 // Dynamic import of the Price Path Chart to prevent SSR errors
 const ProbabilityChart = dynamic(() => import("@/components/ProbabilityChart"), { ssr: false });
+const FloatingTradesFeed = dynamic(() => import("@/components/FloatingTradesFeed"), { ssr: false });
 
 import { useBinancePrice, useBinanceKlines } from "@/hooks/useBinance";
 
@@ -407,18 +408,8 @@ export default function TradePage() {
 
         {/* 4. PRICE CHART CARD */}
         <div className="relative">
-          {/* Floating executed trades indicators on the left margin */}
-          <div className="absolute left-2 top-8 z-10 flex flex-col gap-1.5 pointer-events-none select-none">
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-[#00C853] text-[9.5px] font-extrabold">
-              + $50
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="text-[#FF3B57] text-[9.5px] font-extrabold">
-              + $5
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5 }} className="text-[#00C853] text-[9.5px] font-extrabold">
-              + $100
-            </motion.div>
-          </div>
+          {/* Floating executed trades indicators - rising from bottom like Polymarket */}
+          <FloatingTradesFeed />
 
           {/* Actual Price path chart */}
           <ProbabilityChart data={chartPoints} loading={false} error={null} side={selectedSide} referencePrice={referencePrice} chartStyle={chartStyle} candles={binanceCandles} />
