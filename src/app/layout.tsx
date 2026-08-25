@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "PredictBTC — Will Bitcoin go up today?",
-  description: "Trade Yes or No on BTC price direction. Real-time odds, instant settlement, and premium SaaS analytics. Built to scale.",
+  title: "YesnoBet — Will Bitcoin go up today?",
+  description: "Trade Yes or No on BTC price direction. Real-time odds, instant settlement. YesnoBet — the smartest way to bet on crypto.",
 };
 
 export default function RootLayout({

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -39,12 +40,14 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           {/* Logo */}
           <a href="#" className="flex items-center gap-2 group">
-            <span className="w-8 h-8 rounded-lg bg-black flex items-center justify-center font-bold text-white text-lg tracking-tighter transition-transform group-hover:scale-105">
-              P
-            </span>
-            <span className="font-bold text-xl tracking-tight text-brand-dark">
-              Predict<span className="text-brand-green">BTC</span>
-            </span>
+            <Image
+              src="/sitelogo.png"
+              alt="YesnoBet"
+              width={120}
+              height={40}
+              className="h-9 w-auto object-contain transition-transform group-hover:scale-105"
+              priority
+            />
           </a>
 
           {/* Desktop Nav Links */}

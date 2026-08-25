@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Globe } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   const footerLinks = [
@@ -117,15 +118,16 @@ export default function Footer() {
         {/* Brand Block */}
         <div className="col-span-2 flex flex-col items-start gap-4">
           <a href="#" className="flex items-center gap-2">
-            <span className="w-8 h-8 rounded-lg bg-black flex items-center justify-center font-bold text-white text-lg tracking-tighter">
-              P
-            </span>
-            <span className="font-bold text-xl tracking-tight text-brand-dark">
-              Predict<span className="text-brand-green">BTC</span>
-            </span>
+            <Image
+              src="/sitelogo.png"
+              alt="YesnoBet"
+              width={120}
+              height={40}
+              className="h-9 w-auto object-contain"
+            />
           </a>
           <p className="text-gray-500 text-xs md:text-sm max-w-xs leading-relaxed">
-            The next-generation Bitcoin prediction market. Designed with modern SaaS tools, offering micro-second odds computation and zero friction.
+            The next-generation Bitcoin prediction market. Trade Yes or No on BTC direction — real-time odds, instant settlement.
           </p>
         </div>
 
@@ -154,7 +156,7 @@ export default function Footer() {
       {/* FOOTER BOTTOM BAR */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-brand-border flex flex-col md:flex-row items-center justify-between gap-4">
         <span className="text-xs text-gray-400 font-medium">
-          © {new Date().getFullYear()} PredictBTC Inc. All rights reserved.
+          © {new Date().getFullYear()} YesnoBet. All rights reserved.
         </span>
 
         {/* Social Links */}
