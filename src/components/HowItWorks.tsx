@@ -29,7 +29,7 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="py-24 md:py-32 max-w-7xl mx-auto px-6">
+    <section id="how-it-works" className="py-24 md:py-32 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-16">
         <motion.div
           initial={{ opacity: 0, y: 15 }}

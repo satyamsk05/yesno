@@ -127,7 +127,7 @@ export default function MarketCard({ price, priceHistory, priceDirection }: Mark
   const fillColorId = isTrendingUp ? "greenGradient" : "redGradient";
 
   return (
-    <section id="markets" className="py-24 md:py-32 max-w-7xl mx-auto px-6">
+    <section id="markets" className="py-24 md:py-32 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -188,7 +188,7 @@ export default function MarketCard({ price, priceHistory, priceDirection }: Mark
             </div>
 
             {/* Sparkline SVG */}
-            <div className="w-full overflow-hidden h-[160px] flex items-center justify-center">
+            <div className="w-full overflow-hidden h-[120px] sm:h-[160px] flex items-center justify-center">
               <svg
                 viewBox={`0 0 ${chartWidth} ${chartHeight}`}
                 className="w-full h-full overflow-visible"
@@ -232,7 +232,7 @@ export default function MarketCard({ price, priceHistory, priceDirection }: Mark
 
           {/* Action Area */}
           <div className="p-6 border-t border-brand-border bg-white flex flex-col gap-6">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* YES BUTTON */}
               <motion.button
                 onClick={handleVoteYes}

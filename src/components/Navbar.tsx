@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -61,15 +62,16 @@ export default function Navbar() {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <motion.a
-              href="#markets"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full bg-brand-dark text-white text-sm font-semibold hover:bg-black/90 transition-colors shadow-sm"
-            >
-              Launch App
-              <ArrowUpRight className="w-4 h-4" />
-            </motion.a>
+            <Link href="/trade" passHref legacyBehavior>
+              <motion.a
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full bg-brand-dark text-white text-sm font-semibold hover:bg-black/90 transition-colors shadow-sm cursor-pointer"
+              >
+                Launch App
+                <ArrowUpRight className="w-4 h-4" />
+              </motion.a>
+            </Link>
           </div>
 
           {/* Mobile Hamburger Trigger */}
@@ -105,15 +107,16 @@ export default function Navbar() {
                 </a>
               ))}
             </nav>
-            <motion.a
-              href="#markets"
-              onClick={() => setIsMobileMenuOpen(false)}
-              whileTap={{ scale: 0.95 }}
-              className="w-full text-center py-3 rounded-full bg-brand-dark text-white font-semibold flex items-center justify-center gap-1.5 animate-none"
-            >
-              Launch App
-              <ArrowUpRight className="w-4 h-4" />
-            </motion.a>
+            <Link href="/trade" passHref legacyBehavior>
+              <motion.a
+                onClick={() => setIsMobileMenuOpen(false)}
+                whileTap={{ scale: 0.95 }}
+                className="w-full text-center py-3 rounded-full bg-brand-dark text-white font-semibold flex items-center justify-center gap-1.5 animate-none cursor-pointer"
+              >
+                Launch App
+                <ArrowUpRight className="w-4 h-4" />
+              </motion.a>
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>

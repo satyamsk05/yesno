@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowUpRight, Globe } from "lucide-react";
+import Link from "next/link";
 
 export default function Footer() {
   const footerLinks = [
@@ -78,15 +79,16 @@ export default function Footer() {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 w-full sm:w-auto"
           >
-            <motion.a
-              href="#markets"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-brand-dark text-white font-semibold flex items-center justify-center gap-1.5 hover:bg-black/95 hover:scale-[1.03] transition-all duration-200 shadow-md group"
-            >
-              Trade Now
-              <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </motion.a>
+            <Link href="/trade" passHref legacyBehavior>
+              <motion.a
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-brand-dark text-white font-semibold flex items-center justify-center gap-1.5 hover:bg-black/95 hover:scale-[1.03] transition-all duration-200 shadow-md group cursor-pointer"
+              >
+                Trade Now
+                <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </motion.a>
+            </Link>
             <motion.a
               href="#how-it-works"
               whileHover={{ scale: 1.03 }}
@@ -111,7 +113,7 @@ export default function Footer() {
       </div>
 
       {/* FOOTER LINKS GRID */}
-      <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-5 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-2 md:grid-cols-5 gap-8">
         {/* Brand Block */}
         <div className="col-span-2 flex flex-col items-start gap-4">
           <a href="#" className="flex items-center gap-2">
@@ -150,7 +152,7 @@ export default function Footer() {
       </div>
 
       {/* FOOTER BOTTOM BAR */}
-      <div className="max-w-7xl mx-auto px-6 py-8 border-t border-brand-border flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-brand-border flex flex-col md:flex-row items-center justify-between gap-4">
         <span className="text-xs text-gray-400 font-medium">
           © {new Date().getFullYear()} PredictBTC Inc. All rights reserved.
         </span>

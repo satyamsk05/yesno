@@ -8,7 +8,7 @@ export default function Testimonials() {
 
   return (
     <section className="bg-white border-t border-b border-gray-200/70 py-24 md:py-32 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 flex flex-col items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         {/* Testimonial Quote */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -22,7 +22,7 @@ export default function Testimonials() {
             <Quote className="w-5 h-5 text-gray-400 fill-gray-400" />
           </div>
 
-          <blockquote className="text-2xl md:text-3xl font-medium tracking-tight text-brand-dark leading-normal mb-8 text-balance">
+          <blockquote className="text-lg sm:text-2xl md:text-3xl font-medium tracking-tight text-brand-dark leading-normal mb-8 text-balance">
             &quot;PredictBTC has completely redefined how I capture quick market movements. The payouts are instant, the UX is unmatched, and there are no complicated options terms to decipher.&quot;
           </blockquote>
 
@@ -57,7 +57,7 @@ export default function Testimonials() {
           <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-8">
             Trusted by traders from
           </span>
-          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 w-full">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap items-center justify-center gap-x-12 gap-y-6 w-full max-w-sm md:max-w-none text-center">
             {companies.map((name, index) => (
               <motion.span
                 key={name}

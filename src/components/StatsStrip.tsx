@@ -58,8 +58,8 @@ export default function StatsStrip() {
 
   return (
     <section className="bg-white border-y border-brand-border py-24 md:py-32">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-0 text-center md:divide-x md:divide-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 text-center md:divide-x md:divide-gray-200">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -67,7 +67,7 @@ export default function StatsStrip() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="flex flex-col items-center justify-center md:px-6"
+              className="flex flex-col items-center justify-center py-8 md:py-0 border-b border-gray-100 last:border-b-0 md:border-b-0 md:px-6"
             >
               <div className="text-4xl md:text-5xl font-bold tracking-tight text-brand-dark mb-2">
                 <CountUp target={stat.target} format={stat.format} />
