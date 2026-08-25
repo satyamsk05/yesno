@@ -329,12 +329,9 @@ export default function TradePage() {
         <div className="flex flex-col gap-1 border-b border-brand-border pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              {/* BTC Badge with "15m" overlay */}
-              <div className="relative w-10 h-10 rounded-full bg-[#f2a900] flex items-center justify-center font-bold text-white text-lg shadow-xs select-none">
+              {/* BTC Badge */}
+              <div className="w-10 h-10 rounded-full bg-[#f2a900] flex items-center justify-center font-bold text-white text-lg shadow-xs select-none">
                 ₿
-                <span className="absolute bottom-0 right-0 bg-black/85 text-[8px] font-black text-white px-1 py-0.2 rounded-md scale-90 border border-white/20 uppercase">
-                  5m
-                </span>
               </div>
               <div>
                 <h1 className="text-base font-extrabold text-brand-dark flex items-center gap-1.5 leading-none">
@@ -850,7 +847,7 @@ export default function TradePage() {
                           exit={{ height: 0, opacity: 0 }}
                           className="overflow-hidden text-xs text-gray-500 pt-2.5 leading-relaxed"
                         >
-                          This demo connects directly to Binance&apos;s live WebSocket data feed. Prices represent the spot value of BTCUSDT in US Dollars.
+                           This platform connects directly to Binance&apos;s live WebSocket data feed. Prices represent the spot value of BTCUSDT in US Dollars.
                         </motion.div>
                       )}
                     </AnimatePresence>
