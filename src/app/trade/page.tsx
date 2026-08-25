@@ -109,7 +109,7 @@ export default function TradePage() {
               particleCount: 70,
               spread: 60,
               origin: { y: 0.8 },
-              colors: ["#2F80ED", "#ffffff"],
+              colors: ["#00C853", "#ffffff"],
             });
           } else {
             showToast(`❌ LOSS! Contract resolved against your prediction.`);
@@ -273,7 +273,7 @@ export default function TradePage() {
       angle: selectedSide === "YES" ? 60 : 120,
       spread: 40,
       origin: { y: 0.85 },
-      colors: selectedSide === "YES" ? ["#2F80ED"] : ["#FF3B57"],
+      colors: selectedSide === "YES" ? ["#00C853"] : ["#FF3B57"],
     });
   };
 
@@ -504,7 +504,7 @@ export default function TradePage() {
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
-              <span className={`relative z-10 block text-xs font-bold leading-none ${chartStyle === "line" ? "text-[#2F80ED]" : "text-gray-400"}`}>
+              <span className={`relative z-10 block text-xs font-bold leading-none ${chartStyle === "line" ? "text-[#00C853]" : "text-gray-400"}`}>
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
                 </svg>
@@ -524,7 +524,7 @@ export default function TradePage() {
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
-              <span className={`relative z-10 block text-[10px] font-black leading-none ${chartStyle === "deviation" ? "text-[#2F80ED]" : "text-[#f2a900]"}`}>
+              <span className={`relative z-10 block text-[10px] font-black leading-none ${chartStyle === "deviation" ? "text-[#00C853]" : "text-[#f2a900]"}`}>
                 ₿
               </span>
             </button>
@@ -542,7 +542,7 @@ export default function TradePage() {
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
-              <span className={`relative z-10 block text-xs font-bold leading-none ${chartStyle === "candles" ? "text-[#2F80ED]" : "text-gray-400"}`}>
+              <span className={`relative z-10 block text-xs font-bold leading-none ${chartStyle === "candles" ? "text-[#00C853]" : "text-gray-400"}`}>
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <line x1="7" y1="3" x2="7" y2="21" stroke="#00C853" strokeWidth="2" strokeLinecap="round" />
                   <rect x="5" y="7" width="4" height="9" rx="0.5" fill="#00C853" stroke="#00C853" strokeWidth="1" />
@@ -565,11 +565,11 @@ export default function TradePage() {
                 {selectedSide === "YES" && (
                   <motion.div
                     layoutId="active-trade-side"
-                    className="absolute inset-0 bg-[#2F80ED] rounded-lg -z-10 shadow-md shadow-[#2F80ED]/15"
+                    className="absolute inset-0 bg-[#00C853] rounded-lg -z-10 shadow-md shadow-[#00C853]/15"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
-                <span className={selectedSide === "YES" ? "text-white" : "text-[#2F80ED]"}>
+                <span className={selectedSide === "YES" ? "text-white" : "text-[#00C853]"}>
                   UP {yesPrice}¢
                 </span>
               </button>
@@ -684,7 +684,7 @@ export default function TradePage() {
                     >
                       <div className="flex items-center justify-between text-xs">
                         <span className={`px-2 py-0.5 rounded-full font-extrabold text-[9px] uppercase ${
-                          pos.side === "YES" ? "bg-[#2F80ED]/10 text-[#2F80ED]" : "bg-[#FF3B57]/10 text-[#FF3B57]"
+                          pos.side === "YES" ? "bg-[#00C853]/10 text-[#00C853]" : "bg-[#FF3B57]/10 text-[#FF3B57]"
                         }`}>
                           {pos.side}
                         </span>
@@ -756,7 +756,7 @@ export default function TradePage() {
                           </td>
                           <td className="py-4 px-4 font-semibold">
                             <span className={`px-2 py-0.5 rounded-md text-[9px] font-bold ${
-                              trade.side === "YES" ? "bg-[#2F80ED]/10 text-[#2F80ED]" : "bg-[#FF3B57]/10 text-[#FF3B57]"
+                              trade.side === "YES" ? "bg-[#00C853]/10 text-[#00C853]" : "bg-[#FF3B57]/10 text-[#FF3B57]"
                             }`}>
                               {trade.side}
                             </span>
