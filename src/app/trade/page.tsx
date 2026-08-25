@@ -478,40 +478,6 @@ export default function TradePage() {
             {selectedPill === "1h" && <span>✓</span>}
             {formatTime(timeWindow.start + 3600)}
           </button>
-
-          <button className="px-3 py-1.5 rounded-full text-xs font-bold border border-brand-border text-gray-500 flex items-center gap-1 cursor-pointer">
-            More ▾
-          </button>
-
-          {/* Icons right */}
-          <div className="flex items-center gap-1.5 ml-auto pl-2 border-l border-brand-border">
-            <button className="p-1.5 border border-brand-border rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50 cursor-pointer" aria-label="Token options">
-              ₿
-            </button>
-            <button className="p-1.5 border border-brand-border rounded-lg text-xs hover:bg-gray-50 cursor-pointer" aria-label="Toggle visual path">
-              📈
-            </button>
-          </div>
-        </div>
-
-        {/* 6. LP REWARDS BOX (Replicating gold-tint card) */}
-        <div className="bg-[#FFFDF4] border border-[#F1E0B3] rounded-xl p-3.5 flex items-center justify-between shadow-xs">
-          <div className="flex flex-col gap-0.5">
-            <span className="text-[10px] font-bold text-[#D09A0A] uppercase tracking-wider">Current LP Rewards</span>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-[#D09A0A] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#D09A0A]"></span>
-              </span>
-              <span className="text-[10px] font-semibold text-gray-500">Live</span>
-            </div>
-          </div>
-          <div className="text-right">
-            <div className="text-sm font-extrabold text-[#D09A0A] flex items-center justify-end gap-1 leading-none">
-              750 <span className="bg-[#D09A0A] text-white text-[8px] font-black px-1 py-0.2 rounded-sm uppercase tracking-tighter scale-95">pp</span>
-            </div>
-            <span className="text-[9px] font-bold text-[#D09A0A]/70">to be earned</span>
-          </div>
         </div>
 
         {/* 7. UP/DOWN CENTS BUTTONS (Replicating the YES/NO buy panel of screenshot) */}
