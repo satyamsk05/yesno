@@ -56,6 +56,7 @@ export default function TradePage() {
   const [probabilityYes, setProbabilityYes] = useState<number>(50);
   const [chartPoints, setChartPoints] = useState<ChartPoint[]>([]);
   const [selectedPill, setSelectedPill] = useState<string>("5m");
+  const [chartStyle, setChartStyle] = useState<"line" | "deviation" | "candles">("line");
 
   // 4. ORDER / BUY PANEL STATE
   const [selectedSide, setSelectedSide] = useState<"YES" | "NO">("YES");
@@ -422,7 +423,7 @@ export default function TradePage() {
           </div>
 
           {/* Actual Price path chart */}
-          <ProbabilityChart data={chartPoints} loading={false} error={null} side={selectedSide} referencePrice={referencePrice} />
+          <ProbabilityChart data={chartPoints} loading={false} error={null} side={selectedSide} referencePrice={referencePrice} chartStyle={chartStyle} />
         </div>
 
         {/* 5. INTERVAL TIME PILLS (Replicating capsules row below chart) */}
@@ -498,6 +499,67 @@ export default function TradePage() {
               {formatTime(timeWindow.start + 3600)}
             </span>
           </button>
+
+          {/* Chart Style Switcher (replaces old icons right) */}
+          <div className="flex bg-gray-50 border border-brand-border p-1 rounded-full ml-auto select-none">
+            {/* Style 1: Line/Area */}
+            <button
+              onClick={() => setChartStyle("line")}
+              className="relative p-1.5 rounded-full transition-all cursor-pointer flex items-center justify-center"
+              aria-label="Area Line Chart"
+            >
+              {chartStyle === "line" && (
+                <motion.div
+                  layoutId="active-chart-style"
+                  className="absolute inset-0 bg-[#EBF3FF] border border-[#D0E5FF] rounded-full"
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
+              <span className={`relative z-10 block text-xs font-bold leading-none ${chartStyle === "line" ? "text-[#2F80ED]" : "text-gray-400"}`}>
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+                </svg>
+              </span>
+            </button>
+
+            {/* Style 2: Bitcoin price deviation */}
+            <button
+              onClick={() => setChartStyle("deviation")}
+              className="relative p-1.5 rounded-full transition-all cursor-pointer px-2.5 flex items-center justify-center"
+              aria-label="Bitcoin Ticker Deviation"
+            >
+              {chartStyle === "deviation" && (
+                <motion.div
+                  layoutId="active-chart-style"
+                  className="absolute inset-0 bg-[#EBF3FF] border border-[#D0E5FF] rounded-full"
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
+              <span className={`relative z-10 block text-[10px] font-black leading-none ${chartStyle === "deviation" ? "text-[#2F80ED]" : "text-[#f2a900]"}`}>
+                ₿
+              </span>
+            </button>
+
+            {/* Style 3: Candlesticks */}
+            <button
+              onClick={() => setChartStyle("candles")}
+              className="relative p-1.5 rounded-full transition-all cursor-pointer flex items-center justify-center"
+              aria-label="Candlestick Chart"
+            >
+              {chartStyle === "candles" && (
+                <motion.div
+                  layoutId="active-chart-style"
+                  className="absolute inset-0 bg-[#EBF3FF] border border-[#D0E5FF] rounded-full"
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
+              <span className={`relative z-10 block text-xs font-bold leading-none ${chartStyle === "candles" ? "text-[#2F80ED]" : "text-gray-400"}`}>
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 19V5m6 14V5M3 12h18" />
+                </svg>
+              </span>
+            </button>
+          </div>
         </div>
 
         {/* 7. UP/DOWN CENTS BUTTONS (Replicating the YES/NO buy panel of screenshot) */}
