@@ -1,16 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Compass, User, X, CheckCircle, Wallet, Trophy } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 
+interface FullscreenElement extends HTMLElement {
+  webkitRequestFullscreen?: () => Promise<void>;
+  mozRequestFullScreen?: () => Promise<void>;
+  msRequestFullscreen?: () => Promise<void>;
+}
+
 export default function MobileNav() {
   const pathname = usePathname();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // 1. MOBILE AUTO FULLSCREEN TRIGGER EFFECT
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handleFirstInteraction = () => {
+      // Only execute on mobile screens
+      if (window.innerWidth < 768) {
+        const docEl = document.documentElement as FullscreenElement;
+        
+        // Check if already in fullscreen
+        if (!document.fullscreenElement) {
+          const requestFS =
+            docEl.requestFullscreen ||
+            docEl.webkitRequestFullscreen ||
+            docEl.mozRequestFullScreen ||
+            docEl.msRequestFullscreen;
+
+          if (requestFS) {
+            requestFS.call(docEl).catch((err: unknown) => {
+              console.warn("Fullscreen request failed:", err);
+            });
+          }
+        }
+      }
+      // Remove event listeners immediately after first tap/click
+      document.removeEventListener("click", handleFirstInteraction);
+      document.removeEventListener("touchstart", handleFirstInteraction);
+    };
+
+    document.addEventListener("click", handleFirstInteraction);
+    document.addEventListener("touchstart", handleFirstInteraction);
+
+    return () => {
+      document.removeEventListener("click", handleFirstInteraction);
+      document.removeEventListener("touchstart", handleFirstInteraction);
+    };
+  }, []);
 
   // Read balance from localStorage or use default mock to match the state
   const [walletBalance, setWalletBalance] = useState<number>(1000.00);
