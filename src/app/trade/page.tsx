@@ -751,7 +751,7 @@ export default function TradePage() {
                     <tbody>
                       {resolvedTrades.map((trade) => (
                         <tr key={trade.id} className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
-                          <td className="py-4 pr-4 text-gray-500 font-medium">
+                          <td className="py-4 pr-4 text-gray-500 font-medium" suppressHydrationWarning>
                             {new Date(trade.timestamp).toLocaleTimeString()}
                           </td>
                           <td className="py-4 px-4 font-semibold">
