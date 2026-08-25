@@ -39,15 +39,15 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2 group">
-            <Image
-              src="/sitelogo.png"
-              alt="YesnoBet"
-              width={120}
-              height={40}
-              className="h-9 w-auto object-contain transition-transform group-hover:scale-105"
-              priority
-            />
+          <a href="#" className="flex items-center gap-0 group select-none">
+            <span className="flex flex-col items-start leading-none transition-transform group-hover:scale-105">
+              <span className="text-[22px] font-black tracking-tighter text-[#0A0A0A] lowercase">
+                yesno
+              </span>
+              <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-gray-400 ml-0.5 -mt-0.5">
+                — bet —
+              </span>
+            </span>
           </a>
 
           {/* Desktop Nav Links */}
