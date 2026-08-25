@@ -430,80 +430,112 @@ export default function TradePage() {
           {/* Pill 1 */}
           <button
             onClick={() => setSelectedPill("5m")}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 cursor-pointer transition-all ${
-              selectedPill === "5m"
-                ? "bg-[#ECECFF] text-[#6C5CE7] border border-[#D5D0FF]"
-                : "border border-brand-border text-gray-500 hover:text-brand-dark hover:bg-gray-50"
-            }`}
+            className="relative px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer z-10"
           >
-            {selectedPill === "5m" && <span>✓</span>}
-            {formatTime(timeWindow.start)}
+            {selectedPill === "5m" && (
+              <motion.div
+                layoutId="active-interval-pill"
+                className="absolute inset-0 bg-[#ECECFF] border border-[#D5D0FF] rounded-full -z-10"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              />
+            )}
+            <span className={selectedPill === "5m" ? "text-[#6C5CE7]" : "text-gray-500 hover:text-brand-dark"}>
+              {selectedPill === "5m" && "✓ "}
+              {formatTime(timeWindow.start)}
+            </span>
           </button>
           
           {/* Pill 2 */}
           <button
             onClick={() => setSelectedPill("15m")}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-2 cursor-pointer transition-all ${
-              selectedPill === "15m"
-                ? "bg-[#ECECFF] text-[#6C5CE7] border border-[#D5D0FF]"
-                : "border border-brand-border text-gray-500 hover:text-brand-dark hover:bg-gray-50"
-            }`}
+            className="relative px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer z-10"
           >
-            {selectedPill === "15m" && <span>✓</span>}
-            {formatTime(timeWindow.start + 900)}
+            {selectedPill === "15m" && (
+              <motion.div
+                layoutId="active-interval-pill"
+                className="absolute inset-0 bg-[#ECECFF] border border-[#D5D0FF] rounded-full -z-10"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              />
+            )}
+            <span className={selectedPill === "15m" ? "text-[#6C5CE7]" : "text-gray-500 hover:text-brand-dark"}>
+              {selectedPill === "15m" && "✓ "}
+              {formatTime(timeWindow.start + 900)}
+            </span>
           </button>
 
           {/* Pill 3 */}
           <button
             onClick={() => setSelectedPill("30m")}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-bold cursor-pointer transition-all ${
-              selectedPill === "30m"
-                ? "bg-[#ECECFF] text-[#6C5CE7] border border-[#D5D0FF]"
-                : "border border-brand-border text-gray-500 hover:text-brand-dark hover:bg-gray-50"
-            }`}
+            className="relative px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer z-10"
           >
-            {selectedPill === "30m" && <span>✓</span>}
-            {formatTime(timeWindow.start + 1800)}
+            {selectedPill === "30m" && (
+              <motion.div
+                layoutId="active-interval-pill"
+                className="absolute inset-0 bg-[#ECECFF] border border-[#D5D0FF] rounded-full -z-10"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              />
+            )}
+            <span className={selectedPill === "30m" ? "text-[#6C5CE7]" : "text-gray-500 hover:text-brand-dark"}>
+              {selectedPill === "30m" && "✓ "}
+              {formatTime(timeWindow.start + 1800)}
+            </span>
           </button>
 
           {/* Pill 4 */}
           <button
             onClick={() => setSelectedPill("1h")}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-bold cursor-pointer transition-all ${
-              selectedPill === "1h"
-                ? "bg-[#ECECFF] text-[#6C5CE7] border border-[#D5D0FF]"
-                : "border border-brand-border text-gray-500 hover:text-brand-dark hover:bg-gray-50"
-            }`}
+            className="relative px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer z-10"
           >
-            {selectedPill === "1h" && <span>✓</span>}
-            {formatTime(timeWindow.start + 3600)}
+            {selectedPill === "1h" && (
+              <motion.div
+                layoutId="active-interval-pill"
+                className="absolute inset-0 bg-[#ECECFF] border border-[#D5D0FF] rounded-full -z-10"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              />
+            )}
+            <span className={selectedPill === "1h" ? "text-[#6C5CE7]" : "text-gray-500 hover:text-brand-dark"}>
+              {selectedPill === "1h" && "✓ "}
+              {formatTime(timeWindow.start + 3600)}
+            </span>
           </button>
         </div>
 
         {/* 7. UP/DOWN CENTS BUTTONS (Replicating the YES/NO buy panel of screenshot) */}
         <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-brand-border p-4 shadow-[0_-10px_30px_rgba(0,0,0,0.06)] rounded-t-2xl md:relative md:bottom-auto md:left-auto md:right-auto md:z-auto md:border md:rounded-xl md:p-5 md:shadow-none flex flex-col gap-4">
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setSelectedSide("YES")}
-              className={`flex-1 py-3.5 rounded-xl text-sm font-bold tracking-wider cursor-pointer border flex items-center justify-center gap-1.5 transition-all ${
-                selectedSide === "YES"
-                  ? "bg-[#2F80ED] border-transparent text-white shadow-lg shadow-[#2F80ED]/15"
-                  : "bg-transparent border-brand-border text-[#2F80ED] hover:bg-[#2F80ED]/5"
-              }`}
-            >
-              UP {yesPrice}¢
-            </button>
+            <div className="relative flex bg-gray-50 border border-brand-border p-1 rounded-2xl w-full select-none">
+              <button
+                onClick={() => setSelectedSide("YES")}
+                className="relative flex-1 py-3 rounded-xl text-sm font-bold tracking-wider cursor-pointer flex items-center justify-center gap-1.5 z-10 transition-colors duration-300"
+              >
+                {selectedSide === "YES" && (
+                  <motion.div
+                    layoutId="active-trade-side"
+                    className="absolute inset-0 bg-[#2F80ED] rounded-xl -z-10 shadow-md shadow-[#2F80ED]/15"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <span className={selectedSide === "YES" ? "text-white" : "text-[#2F80ED]"}>
+                  UP {yesPrice}¢
+                </span>
+              </button>
 
-            <button
-              onClick={() => setSelectedSide("NO")}
-              className={`flex-1 py-3.5 rounded-xl text-sm font-bold tracking-wider cursor-pointer border flex items-center justify-center gap-1.5 transition-all ${
-                selectedSide === "NO"
-                  ? "bg-[#FFF3F5] border-[#FFD0D6] text-[#FF3B57] shadow-lg shadow-[#FF3B57]/5"
-                  : "bg-transparent border-brand-border text-[#FF3B57] hover:bg-[#FF3B57]/5"
-              }`}
-            >
-              DOWN {noPrice}¢
-            </button>
+              <button
+                onClick={() => setSelectedSide("NO")}
+                className="relative flex-1 py-3 rounded-xl text-sm font-bold tracking-wider cursor-pointer flex items-center justify-center gap-1.5 z-10 transition-colors duration-300"
+              >
+                {selectedSide === "NO" && (
+                  <motion.div
+                    layoutId="active-trade-side"
+                    className="absolute inset-0 bg-[#FF3B57] rounded-xl -z-10 shadow-md shadow-[#FF3B57]/15"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <span className={selectedSide === "NO" ? "text-white" : "text-[#FF3B57]"}>
+                  DOWN {noPrice}¢
+                </span>
+              </button>
+            </div>
 
             {/* Three dot menu */}
             <button className="p-3 border border-brand-border rounded-xl text-gray-500 hover:bg-gray-50 cursor-pointer" aria-label="More actions">
@@ -579,46 +611,56 @@ export default function TradePage() {
             </div>
           ) : (
             <div className="flex flex-col gap-3">
-              {positions.map((pos) => {
-                const currentSharePrice = pos.side === "YES" ? probabilityYes : 100 - probabilityYes;
-                const currentValue = pos.shares * (currentSharePrice / 100);
-                const pnl = currentValue - pos.invested;
-                const pnlPercent = (pnl / pos.invested) * 100;
+              <AnimatePresence initial={false}>
+                {positions.map((pos) => {
+                  const currentSharePrice = pos.side === "YES" ? probabilityYes : 100 - probabilityYes;
+                  const currentValue = pos.shares * (currentSharePrice / 100);
+                  const pnl = currentValue - pos.invested;
+                  const pnlPercent = (pnl / pos.invested) * 100;
 
-                return (
-                  <div key={pos.id} className="bg-gray-50 border border-brand-border rounded-xl p-3 flex flex-col gap-2">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className={`px-2 py-0.5 rounded-full font-extrabold text-[9px] uppercase ${
-                        pos.side === "YES" ? "bg-[#2F80ED]/10 text-[#2F80ED]" : "bg-[#FF3B57]/10 text-[#FF3B57]"
-                      }`}>
-                        {pos.side}
-                      </span>
-                      <span className="text-gray-400 font-semibold">Ends: {formatTime(pos.windowEnd)}</span>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-y-2 text-[10px] text-gray-400 mt-1">
-                      <div>
-                        <div>Shares</div>
-                        <div className="text-brand-dark font-bold tabular-nums">{Math.round(pos.shares)}</div>
+                  return (
+                    <motion.div
+                      key={pos.id}
+                      layout
+                      initial={{ opacity: 0, height: 0, y: -15 }}
+                      animate={{ opacity: 1, height: "auto", y: 0 }}
+                      exit={{ opacity: 0, height: 0, y: 15 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                      className="bg-gray-50 border border-brand-border rounded-xl p-3 flex flex-col gap-2 overflow-hidden"
+                    >
+                      <div className="flex items-center justify-between text-xs">
+                        <span className={`px-2 py-0.5 rounded-full font-extrabold text-[9px] uppercase ${
+                          pos.side === "YES" ? "bg-[#2F80ED]/10 text-[#2F80ED]" : "bg-[#FF3B57]/10 text-[#FF3B57]"
+                        }`}>
+                          {pos.side}
+                        </span>
+                        <span className="text-gray-400 font-semibold">Ends: {formatTime(pos.windowEnd)}</span>
                       </div>
-                      <div>
-                        <div>Avg Cost</div>
-                        <div className="text-brand-dark font-bold tabular-nums">{pos.avgPrice}¢</div>
-                      </div>
-                      <div>
-                        <div>Current Value</div>
-                        <div className="text-brand-dark font-bold tabular-nums">${currentValue.toFixed(2)}</div>
-                      </div>
-                      <div>
-                        <div>Unrealized P&L</div>
-                        <div className={`font-black tabular-nums ${pnl >= 0 ? "text-[#00C853]" : "text-[#FF3B57]"}`}>
-                          {pnl >= 0 ? "+" : ""}${pnl.toFixed(2)} ({pnlPercent.toFixed(1)}%)
+                      
+                      <div className="grid grid-cols-2 gap-y-2 text-[10px] text-gray-400 mt-1">
+                        <div>
+                          <div>Shares</div>
+                          <div className="text-brand-dark font-bold tabular-nums">{Math.round(pos.shares)}</div>
+                        </div>
+                        <div>
+                          <div>Avg Cost</div>
+                          <div className="text-brand-dark font-bold tabular-nums">{pos.avgPrice}¢</div>
+                        </div>
+                        <div>
+                          <div>Current Value</div>
+                          <div className="text-brand-dark font-bold tabular-nums">${currentValue.toFixed(2)}</div>
+                        </div>
+                        <div>
+                          <div>Unrealized P&L</div>
+                          <div className={`font-black tabular-nums ${pnl >= 0 ? "text-[#00C853]" : "text-[#FF3B57]"}`}>
+                            {pnl >= 0 ? "+" : ""}${pnl.toFixed(2)} ({pnlPercent.toFixed(1)}%)
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                );
-              })}
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
             </div>
           )}
         </div>

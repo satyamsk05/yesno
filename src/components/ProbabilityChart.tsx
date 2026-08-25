@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { createChart, ColorType, IChartApi, ISeriesApi, AreaSeries, UTCTimestamp, IPriceLine } from "lightweight-charts";
+import { motion } from "framer-motion";
 
 interface PricePoint {
   time: number; // UNIX timestamp in seconds
@@ -17,148 +16,238 @@ interface ProbabilityChartProps {
 }
 
 export default function ProbabilityChart({ data, loading, error, side, referencePrice }: ProbabilityChartProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const chartRef = useRef<IChartApi | null>(null);
-  const seriesRef = useRef<ISeriesApi<"Area"> | null>(null);
-  const priceLineRef = useRef<IPriceLine | null>(null);
+  // SVG Canvas dimensions
+  const width = 500;
+  const height = 240;
+  
+  // Padding dimensions
+  const padLeft = 15;
+  const padRight = 75;
+  const padTop = 25;
+  const padBottom = 25;
 
-  useEffect(() => {
-    if (!containerRef.current) return;
+  const chartWidth = width - padLeft - padRight;
+  const chartHeight = height - padTop - padBottom;
 
-    // Initialize Lightweight Chart for flat, clean style matching the screenshot
-    const chart = createChart(containerRef.current, {
-      width: containerRef.current.clientWidth,
-      height: 240,
-      layout: {
-        background: { type: ColorType.Solid, color: "#ffffff" },
-        textColor: "#6B7280", // gray-500
-        fontFamily: "Inter, sans-serif",
-      },
-      grid: {
-        vertLines: { color: "#eeeeee" },
-        horzLines: { color: "#eeeeee" },
-      },
-      rightPriceScale: {
-        borderVisible: false,
-        textColor: "#374151", // gray-700
-        entireTextOnly: true,
-      },
-      timeScale: {
-        borderVisible: false,
-        timeVisible: true,
-        secondsVisible: false,
-      },
-      crosshair: {
-        vertLine: {
-          color: "#9ca3af", // gray-400
-          width: 1,
-          style: 3, // dashed
-        },
-        horzLine: {
-          color: "#9ca3af",
-          width: 1,
-          style: 3,
-        },
-      },
-    });
+  // Render loading state
+  if (loading || data.length === 0) {
+    return (
+      <div className="relative w-full h-[240px] bg-white border border-brand-border rounded-xl flex items-center justify-center">
+        <span className="flex h-5 w-5 relative">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2F80ED] opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-5 w-5 bg-[#2F80ED]/30"></span>
+        </span>
+      </div>
+    );
+  }
 
-    // Create the area series matching YFX/Pancake prediction layout
-    const seriesColor = side === "YES" ? "#2F80ED" : "#FF3B57"; // Blue/green for UP/YES, red for NO
-    const topGradient = side === "YES" ? "rgba(47, 128, 237, 0.12)" : "rgba(255, 59, 87, 0.12)";
+  if (error) {
+    return (
+      <div className="w-full h-[240px] bg-white border border-brand-border rounded-xl flex items-center justify-center text-xs text-[#FF3B57] font-medium">
+        Error loading chart data
+      </div>
+    );
+  }
 
-    const series = chart.addSeries(AreaSeries, {
-      lineColor: seriesColor,
-      topColor: topGradient,
-      bottomColor: "rgba(255, 255, 255, 0)",
-      lineWidth: 2,
-      priceFormat: {
-        type: "price",
-        precision: 2,
-        minMove: 0.01,
-      },
-    });
+  // Calculate price boundaries (ensure min/max delta is visible)
+  let minPrice = Math.min(...data.map((d) => d.value));
+  let maxPrice = Math.max(...data.map((d) => d.value));
 
-    // Price scaling margins
-    series.priceScale().applyOptions({
-      autoScale: true,
-      scaleMargins: {
-        top: 0.15,
-        bottom: 0.15,
-      },
-    });
+  // Include target strike in Y boundary checks
+  if (referencePrice > 0) {
+    minPrice = Math.min(minPrice, referencePrice);
+    maxPrice = Math.max(maxPrice, referencePrice);
+  }
 
-    chartRef.current = chart;
-    seriesRef.current = series;
+  const priceDelta = maxPrice - minPrice;
+  const marginOffset = priceDelta * 0.15 || 5.0; // Apply 15% margin padding
+  const yMin = minPrice - marginOffset;
+  const yMax = maxPrice + marginOffset;
+  const yRange = yMax - yMin;
 
-    // Responsive scaling resize handler
-    const handleResize = () => {
-      if (containerRef.current && chartRef.current) {
-        chartRef.current.resize(containerRef.current.clientWidth, 240);
-      }
-    };
-    window.addEventListener("resize", handleResize);
+  // Convert dataset index to SVG X/Y points
+  const points = data.map((d, i) => {
+    const x = padLeft + (i / (data.length - 1)) * chartWidth;
+    const y = padTop + chartHeight - ((d.value - yMin) / yRange) * chartHeight;
+    return { x, y, value: d.value };
+  });
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      chart.remove();
-    };
-  }, [side]); // Recreate series colors if user toggles YES/NO display color
+  const lastPoint = points[points.length - 1];
 
-  // Draw or update the horizontal "Target" strike price line
-  useEffect(() => {
-    if (!seriesRef.current || referencePrice === 0) return;
+  // Target strike Y coordinate
+  const targetY = padTop + chartHeight - ((referencePrice - yMin) / yRange) * chartHeight;
 
-    // Remove previous target line if it exists
-    if (priceLineRef.current) {
-      try {
-        seriesRef.current.removePriceLine(priceLineRef.current);
-      } catch (e) {
-        console.error("Failed to remove old price line:", e);
-      }
+  // Cubic Bezier interpolation path generator
+  const getBezierPath = (pts: { x: number; y: number }[]) => {
+    if (pts.length === 0) return "";
+    if (pts.length === 1) return `M ${pts[0].x} ${pts[0].y}`;
+    if (pts.length === 2) return `M ${pts[0].x} ${pts[0].y} L ${pts[1].x} ${pts[1].y}`;
+    
+    let path = `M ${pts[0].x} ${pts[0].y}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const curr = pts[i];
+      const next = pts[i + 1];
+      const controlX1 = curr.x + (next.x - curr.x) / 3;
+      const controlY1 = curr.y;
+      const controlX2 = curr.x + 2 * (next.x - curr.x) / 3;
+      const controlY2 = next.y;
+      path += ` C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${next.x} ${next.y}`;
     }
+    return path;
+  };
 
-    // Create the horizontal target dashed line
-    const priceLine = seriesRef.current.createPriceLine({
-      price: referencePrice,
-      color: "#4b5563", // gray-600
-      lineWidth: 1,
-      lineStyle: 1, // Dashed
-      axisLabelVisible: true,
-      title: "Target",
-    });
+  const linePath = getBezierPath(points);
+  
+  // Closed Area Path
+  const areaPath = points.length > 0 
+    ? `${linePath} L ${points[points.length - 1].x} ${padTop + chartHeight} L ${points[0].x} ${padTop + chartHeight} Z`
+    : "";
 
-    priceLineRef.current = priceLine;
-  }, [referencePrice]);
+  // Dynamic colors based on user side selection
+  const strokeColor = side === "YES" ? "#2F80ED" : "#FF3B57";
+  const gradientId = `chart-gradient-${side}`;
 
-  // Update chart data points
-  useEffect(() => {
-    if (seriesRef.current && data.length > 0) {
-      const formatted = data.map((pt) => ({
-        time: pt.time as UTCTimestamp,
-        value: pt.value,
-      }));
-      seriesRef.current.setData(formatted);
-    }
-  }, [data]);
+  // Generate 4 horizontal gridlines and text labels
+  const gridLines = [0, 0.33, 0.66, 1.0].map((ratio) => {
+    const y = padTop + ratio * chartHeight;
+    const priceVal = yMax - ratio * yRange;
+    return { y, priceVal };
+  });
 
   return (
-    <div className="relative w-full h-[240px] bg-white overflow-hidden">
-      {loading && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/85 backdrop-blur-xs">
-          <span className="flex h-6 w-6 relative">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-green opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-6 w-6 bg-brand-green/30"></span>
-          </span>
-        </div>
-      )}
+    <div className="relative w-full h-[240px] bg-white overflow-hidden rounded-xl border border-brand-border p-2">
+      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full select-none overflow-visible">
+        <defs>
+          {/* Dynamic Gradient fill */}
+          <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={strokeColor} stopOpacity={0.12} />
+            <stop offset="100%" stopColor={strokeColor} stopOpacity={0.0} />
+          </linearGradient>
+        </defs>
 
-      {error && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white text-xs text-brand-red font-medium">
-          Error loading chart: {error}
-        </div>
-      )}
+        {/* 1. HORIZONTAL GRIDLINES & LABELS */}
+        {gridLines.map((line, idx) => (
+          <g key={idx}>
+            <line
+              x1={padLeft}
+              y1={line.y}
+              x2={padLeft + chartWidth}
+              y2={line.y}
+              stroke="#F3F4F6"
+              strokeWidth={1}
+            />
+            {/* Price tag on right axis */}
+            <text
+              x={padLeft + chartWidth + 8}
+              y={line.y + 3.5}
+              fill="#9CA3AF"
+              fontSize="9"
+              fontWeight="bold"
+              fontFamily="Inter, sans-serif"
+            >
+              ${line.priceVal.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
+            </text>
+          </g>
+        ))}
 
-      <div ref={containerRef} className="w-full h-full" />
+        {/* 2. TARGET STRIKE PRICE LINE */}
+        {referencePrice > 0 && targetY >= padTop && targetY <= padTop + chartHeight && (
+          <g>
+            <motion.line
+              x1={padLeft}
+              y1={targetY}
+              x2={padLeft + chartWidth}
+              y2={targetY}
+              stroke="#6B7280"
+              strokeWidth={1}
+              strokeDasharray="3 3"
+              animate={{ y1: targetY, y2: targetY }}
+              transition={{ type: "spring", stiffness: 100, damping: 18 }}
+            />
+            {/* Target capsule badge on right */}
+            <motion.g
+              animate={{ y: targetY - 7 }}
+              transition={{ type: "spring", stiffness: 100, damping: 18 }}
+            >
+              <rect
+                x={padLeft + chartWidth + 6}
+                width={65}
+                height={14}
+                rx={4}
+                fill="#4B5563"
+              />
+              <text
+                x={padLeft + chartWidth + 10}
+                y={10}
+                fill="#FFFFFF"
+                fontSize="8"
+                fontWeight="extrabold"
+                fontFamily="Inter, sans-serif"
+              >
+                Target
+              </text>
+              <text
+                x={padLeft + chartWidth + 38}
+                y={10}
+                fill="#FFFFFF"
+                fontSize="7"
+                fontWeight="semibold"
+                fontFamily="Inter, sans-serif"
+              >
+                {Math.round(referencePrice)}
+              </text>
+            </motion.g>
+          </g>
+        )}
+
+        {/* 3. CHART GRADIENT AREA */}
+        {areaPath && (
+          <motion.path
+            d={areaPath}
+            fill={`url(#${gradientId})`}
+            animate={{ d: areaPath }}
+            transition={{ type: "spring", stiffness: 100, damping: 18 }}
+          />
+        )}
+
+        {/* 4. MAIN SMOOTH LINE */}
+        {linePath && (
+          <motion.path
+            d={linePath}
+            fill="none"
+            stroke={strokeColor}
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            animate={{ d: linePath }}
+            transition={{ type: "spring", stiffness: 100, damping: 18 }}
+          />
+        )}
+
+        {/* 5. CURRENT SPOT price indicator marker */}
+        {lastPoint && (
+          <g>
+            {/* Pulsing outer dot */}
+            <motion.circle
+              cx={lastPoint.x}
+              cy={lastPoint.y}
+              r={7}
+              fill={strokeColor}
+              opacity={0.2}
+              animate={{ r: [6, 11, 6] }}
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            />
+            {/* Solid inner dot */}
+            <circle
+              cx={lastPoint.x}
+              cy={lastPoint.y}
+              r={3.5}
+              fill={strokeColor}
+              stroke="#FFFFFF"
+              strokeWidth={1.5}
+            />
+          </g>
+        )}
+      </svg>
     </div>
   );
 }
