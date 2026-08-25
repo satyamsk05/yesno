@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Compass, User, X, ArrowDownLeft, ArrowUpRight, History, Award } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import confetti from "canvas-confetti";
 
 interface FullscreenElement extends HTMLElement {
@@ -87,63 +87,68 @@ export default function MobileNav() {
   return (
     <>
       {/* MOBILE BOTTOM NAVIGATION BAR */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-brand-border px-6 py-3.5 shadow-[0_-4px_25px_rgba(0,0,0,0.04)] flex items-center justify-around md:hidden select-none">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-brand-border shadow-[0_-4px_25px_rgba(0,0,0,0.04)] flex items-center justify-around md:hidden select-none px-2 py-2">
+        <LayoutGroup id="mobile-nav">
 
-        {/* Single sliding indicator — always in DOM, just moves left/right */}
-        <motion.div
-          className="absolute bottom-3.5 h-8 bg-[#6C5CE7] rounded-full pointer-events-none"
-          animate={{
-            left: isHomeActive
-              ? "calc(16.67% - 34px)"
-              : isMarketActive
-              ? "calc(50% - 34px)"
-              : "calc(83.33% - 34px)",
-            width: isHomeActive
-              ? "72px"
-              : isMarketActive
-              ? "80px"
-              : "76px",
-          }}
-          transition={{ type: "spring", stiffness: 420, damping: 36 }}
-          style={{ translateY: 0 }}
-        />
+          {/* Tab 1: Home */}
+          <Link href="/">
+            <button className="relative flex items-center justify-center focus:outline-none cursor-pointer w-24 h-10">
+              {isHomeActive && (
+                <motion.div
+                  layoutId="nav-pill"
+                  className="absolute inset-0 bg-[#6C5CE7] rounded-full"
+                  transition={{ type: "spring", stiffness: 500, damping: 38, mass: 0.6 }}
+                />
+              )}
+              <span className={`relative z-10 flex items-center gap-1.5 font-bold text-xs tracking-wide ${
+                isHomeActive ? "text-white" : "text-gray-400"
+              }`}>
+                <Home className="w-4 h-4" />
+                {isHomeActive && <span>Home</span>}
+              </span>
+            </button>
+          </Link>
 
-        {/* Tab 1: Home */}
-        <Link href="/">
-          <button className="relative flex items-center gap-1.5 focus:outline-none cursor-pointer h-8 px-3">
-            <span className={`relative z-10 flex items-center gap-1.5 font-bold text-xs tracking-wide transition-colors duration-200 ${
-              isHomeActive ? "text-white" : "text-gray-400 hover:text-gray-600"
+          {/* Tab 2: Market */}
+          <Link href="/trade">
+            <button className="relative flex items-center justify-center focus:outline-none cursor-pointer w-24 h-10">
+              {isMarketActive && (
+                <motion.div
+                  layoutId="nav-pill"
+                  className="absolute inset-0 bg-[#6C5CE7] rounded-full"
+                  transition={{ type: "spring", stiffness: 500, damping: 38, mass: 0.6 }}
+                />
+              )}
+              <span className={`relative z-10 flex items-center gap-1.5 font-bold text-xs tracking-wide ${
+                isMarketActive ? "text-white" : "text-gray-400"
+              }`}>
+                <Compass className="w-4 h-4" />
+                {isMarketActive && <span>Market</span>}
+              </span>
+            </button>
+          </Link>
+
+          {/* Tab 3: Profile */}
+          <button
+            onClick={() => setIsProfileOpen(true)}
+            className="relative flex items-center justify-center focus:outline-none cursor-pointer w-24 h-10"
+          >
+            {isProfileOpen && (
+              <motion.div
+                layoutId="nav-pill"
+                className="absolute inset-0 bg-[#6C5CE7] rounded-full"
+                transition={{ type: "spring", stiffness: 500, damping: 38, mass: 0.6 }}
+              />
+            )}
+            <span className={`relative z-10 flex items-center gap-1.5 font-bold text-xs tracking-wide ${
+              isProfileOpen ? "text-white" : "text-gray-400"
             }`}>
-              <Home className="w-4 h-4" />
-              {isHomeActive && <span>Home</span>}
+              <User className="w-4 h-4" />
+              {isProfileOpen && <span>Profile</span>}
             </span>
           </button>
-        </Link>
 
-        {/* Tab 2: Market */}
-        <Link href="/trade">
-          <button className="relative flex items-center gap-1.5 focus:outline-none cursor-pointer h-8 px-3">
-            <span className={`relative z-10 flex items-center gap-1.5 font-bold text-xs tracking-wide transition-colors duration-200 ${
-              isMarketActive ? "text-white" : "text-gray-400 hover:text-gray-600"
-            }`}>
-              <Compass className="w-4 h-4" />
-              {isMarketActive && <span>Market</span>}
-            </span>
-          </button>
-        </Link>
-
-        {/* Tab 3: Profile */}
-        <button
-          onClick={() => setIsProfileOpen(true)}
-          className="relative flex items-center gap-1.5 focus:outline-none cursor-pointer h-8 px-3"
-        >
-          <span className={`relative z-10 flex items-center gap-1.5 font-bold text-xs tracking-wide transition-colors duration-200 ${
-            isProfileOpen ? "text-white" : "text-gray-400 hover:text-gray-600"
-          }`}>
-            <User className="w-4 h-4" />
-            {isProfileOpen && <span>Profile</span>}
-          </span>
-        </button>
+        </LayoutGroup>
       </nav>
 
       {/* PROFILE SLIDE-UP DRAWER SHEET */}
