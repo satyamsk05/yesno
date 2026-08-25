@@ -352,15 +352,15 @@ export default function TradePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0F11] text-white font-sans pb-[340px] md:pb-16 antialiased select-none">
-      {/* Toast popup */}
+    <div className="min-h-screen bg-[#FAFAFA] text-[#0A0A0A] font-sans pb-[340px] md:pb-16 antialiased select-none">
+      {/* Toast Alert */}
       <AnimatePresence>
         {toastMessage && (
           <motion.div
             initial={{ opacity: 0, y: 50, x: "-50%" }}
             animate={{ opacity: 1, y: 0, x: "-50%" }}
             exit={{ opacity: 0, y: 50, x: "-50%" }}
-            className="fixed bottom-6 left-1/2 z-50 px-6 py-3 rounded-full bg-[#1b1f24] border border-gray-800 text-sm font-semibold shadow-2xl flex items-center gap-2"
+            className="fixed bottom-6 left-1/2 z-50 px-6 py-3 rounded-full bg-brand-dark text-white text-sm font-semibold shadow-lg flex items-center gap-2"
           >
             <CheckCircle className="w-4 h-4 text-brand-green" />
             {toastMessage}
@@ -369,24 +369,24 @@ export default function TradePage() {
       </AnimatePresence>
 
       {/* 1. TOP BAR */}
-      <header className="sticky top-0 z-40 bg-[#0D0F11]/90 backdrop-blur-md border-b border-gray-800 py-3.5 px-4 sm:px-6 lg:px-8">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-brand-border py-3.5 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <Link href="/" className="p-1.5 hover:bg-gray-800 rounded-full transition-colors active:scale-95">
-              <ArrowLeft className="w-4.5 h-4.5 text-gray-400" />
+            <Link href="/" className="p-1.5 hover:bg-gray-50 rounded-full transition-colors active:scale-95">
+              <ArrowLeft className="w-4.5 h-4.5 text-gray-600" />
             </Link>
-            <nav className="text-xs font-bold text-gray-500 uppercase tracking-widest hidden sm:flex items-center gap-1.5">
-              <span>Crypto</span>
-              <span className="text-gray-700">&gt;</span>
-              <span>Bitcoin</span>
-              <span className="text-gray-700">&gt;</span>
-              <span className="text-gray-300">Up or Down</span>
+            <nav className="text-xs font-bold text-gray-400 uppercase tracking-widest hidden sm:flex items-center gap-1.5">
+              <span className="hover:text-brand-dark transition-colors">Crypto</span>
+              <span className="text-gray-300">&gt;</span>
+              <span className="hover:text-brand-dark transition-colors">Bitcoin</span>
+              <span className="text-gray-300">&gt;</span>
+              <span className="text-brand-dark">Up or Down</span>
             </nav>
           </div>
 
           {/* Binance Spot Reference */}
-          <div className="flex items-center gap-2 bg-[#15191C] border border-gray-800 px-3.5 py-1.5 rounded-full">
-            <span className="text-[10px] font-bold text-gray-500 tracking-wider">BTC Price:</span>
+          <div className="flex items-center gap-2 bg-white border border-brand-border px-3.5 py-1.5 rounded-full shadow-xs">
+            <span className="text-[10px] font-bold text-gray-400 tracking-wider">BTC Price:</span>
             <AnimatePresence mode="wait">
               <motion.span
                 key={btcPrice}
@@ -397,7 +397,7 @@ export default function TradePage() {
                     ? "text-[#00C853]"
                     : priceDirection === "down"
                     ? "text-[#FF3B57]"
-                    : "text-white"
+                    : "text-brand-dark"
                 }`}
               >
                 ${btcPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -406,32 +406,32 @@ export default function TradePage() {
           </div>
 
           {/* Wallet Balance (USDC Demo) */}
-          <div className="flex items-center gap-2 bg-[#1b1f24] border border-gray-800 px-3.5 py-1.5 rounded-full">
-            <Wallet className="w-4 h-4 text-[#00C853]" />
-            <span className="text-xs font-bold tabular-nums">
+          <div className="flex items-center gap-2 bg-brand-dark text-white px-4 py-2 rounded-full shadow-sm">
+            <Wallet className="w-4 h-4 text-brand-green" />
+            <span className="text-sm font-semibold tabular-nums">
               ${demoBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
-            <span className="text-[9px] text-[#00C853] bg-[#00C853]/10 px-1.5 py-0.2 rounded-full font-extrabold uppercase">
+            <span className="text-[9px] text-brand-green bg-brand-green/10 px-1.5 py-0.2 rounded-full font-extrabold uppercase">
               USDC
             </span>
           </div>
         </div>
       </header>
 
-      {/* STAGGERED FADE-IN SECTIONS */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* MAIN LAYOUT */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* LEFT COLUMN: Header, Chart, Book */}
-        <div className="lg:col-span-2 flex flex-col gap-6">
+        <div className="lg:col-span-2 flex flex-col gap-8">
           
           {/* 2. MARKET HEADER */}
-          <div className="bg-[#15191C] border border-gray-800 rounded-xl p-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-5 border-b border-gray-800/50 pb-5">
+          <div className="bg-white border border-brand-border rounded-2xl p-6 shadow-sm hover:shadow-premium transition-all duration-300">
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-5 border-b border-gray-100 pb-5">
               <div className="flex flex-col gap-1.5">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#00C853] bg-[#00C853]/10 px-2.5 py-1 rounded-full w-fit">
                   Bitcoin Market
                 </span>
-                <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white mt-1.5 leading-snug">
+                <h1 className="text-lg sm:text-xl font-bold tracking-tight text-brand-dark mt-1.5 leading-snug">
                   Will Bitcoin resolve above ${referencePrice.toLocaleString(undefined, { minimumFractionDigits: 2 })} at {formatTime(timeWindow.end)}?
                 </h1>
               </div>
@@ -439,7 +439,7 @@ export default function TradePage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-center">
               <div>
-                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Implied Probability</span>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Implied Probability</span>
                 <div className="flex items-baseline gap-2 mt-1">
                   <span className="text-4xl font-extrabold tracking-tight text-[#00C853] tabular-nums">
                     {probabilityYes}%
@@ -448,48 +448,48 @@ export default function TradePage() {
                     {probabilityYes >= prevProbabilityRef.current ? "▲" : "▼"} {Math.abs(probabilityYes - prevProbabilityRef.current)}%
                   </span>
                 </div>
-                <div className="text-[10px] text-gray-500 mt-0.5">chance of YES resolution</div>
+                <div className="text-[10px] text-gray-400 mt-0.5">chance of YES resolution</div>
               </div>
 
               <div>
-                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Market Countdown</span>
-                <div className="text-2xl font-bold text-white mt-1 tabular-nums flex items-center gap-1.5">
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Market Countdown</span>
+                <div className="text-2xl font-bold text-brand-dark mt-1 tabular-nums flex items-center gap-1.5">
                   <Clock className={`w-5 h-5 ${timeWindow.timeLeft <= 10 ? "text-[#FF3B57] animate-pulse" : "text-gray-400"}`} />
                   <span className={timeWindow.timeLeft <= 10 ? "text-[#FF3B57] font-extrabold" : ""}>
                     {getTimerDisplay()}
                   </span>
                 </div>
-                <div className="text-[10px] text-gray-500 mt-0.5">resolves automatically at 0:00</div>
+                <div className="text-[10px] text-gray-400 mt-0.5">resolves automatically at 0:00</div>
               </div>
 
               <div>
-                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Market Volume</span>
-                <div className="text-2xl font-bold text-white mt-1 tabular-nums">
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Market Volume</span>
+                <div className="text-2xl font-bold text-brand-dark mt-1 tabular-nums">
                   $184,291
                 </div>
-                <div className="text-[10px] text-gray-500 mt-0.5">demo liquidity traded</div>
+                <div className="text-[10px] text-gray-400 mt-0.5">demo liquidity traded</div>
               </div>
             </div>
           </div>
 
           {/* 3. PROBABILITY CHART */}
-          <div className="bg-[#15191C] border border-gray-800 rounded-xl p-6">
+          <div className="bg-white border border-brand-border rounded-2xl p-6 shadow-sm hover:shadow-premium transition-all duration-300">
             <div className="flex items-center justify-between mb-5">
               <div>
-                <h3 className="text-sm font-bold text-white">Implied YES Probability</h3>
-                <p className="text-[10px] text-gray-500">Live probability index derived from spot price delta</p>
+                <h3 className="text-sm font-bold text-brand-dark">Implied YES Probability</h3>
+                <p className="text-[10px] text-gray-400">Live probability index derived from spot price delta</p>
               </div>
 
               {/* Timeframe Selectors */}
-              <div className="flex bg-[#0D0F11] border border-gray-800 p-0.5 rounded-lg">
+              <div className="flex bg-gray-50 border border-brand-border p-0.5 rounded-lg">
                 {["1H", "6H", "1D", "ALL"].map((tf) => (
                   <button
                     key={tf}
                     onClick={() => setChartTimeframe(tf)}
-                    className={`px-2.5 py-1 text-[10px] font-bold rounded-md transition-all cursor-pointer ${
+                    className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all cursor-pointer ${
                       chartTimeframe === tf
-                        ? "bg-[#15191C] text-white"
-                        : "text-gray-500 hover:text-gray-300"
+                        ? "bg-white text-brand-dark shadow-xs border border-brand-border/40"
+                        : "text-gray-500 hover:text-brand-dark"
                     }`}
                   >
                     {tf}
@@ -498,15 +498,15 @@ export default function TradePage() {
               </div>
             </div>
 
-            {/* Custom Probability area chart */}
+            {/* Custom Probability Area Chart */}
             <ProbabilityChart data={chartPoints} loading={false} error={null} side={selectedSide} />
           </div>
 
           {/* 5. ORDER BOOK */}
-          <div className="bg-[#15191C] border border-gray-800 rounded-xl overflow-hidden">
+          <div className="bg-white border border-brand-border rounded-2xl overflow-hidden shadow-sm">
             <button
               onClick={() => setIsOrderBookOpen(!isOrderBookOpen)}
-              className="w-full px-6 py-4 flex items-center justify-between text-left font-bold text-xs uppercase tracking-wider text-gray-400 hover:text-white border-b border-gray-800 focus:outline-none cursor-pointer"
+              className="w-full px-6 py-4 flex items-center justify-between text-left font-bold text-xs uppercase tracking-wider text-gray-500 hover:text-brand-dark border-b border-brand-border focus:outline-none cursor-pointer"
             >
               <span>Order Book Depth (USDC Shares)</span>
               <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOrderBookOpen ? "rotate-180" : ""}`} />
@@ -520,25 +520,25 @@ export default function TradePage() {
                   exit={{ height: 0 }}
                   className="overflow-hidden"
                 >
-                  <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-gray-800">
+                  <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-brand-border">
                     {/* YES side */}
                     <div className="p-4">
                       <div className="text-[10px] font-bold text-[#00C853] mb-3 uppercase tracking-wider">YES Shares Book</div>
                       <div className="flex flex-col gap-2">
                         {/* Asks (Sells) - reverse order */}
                         {getYESAsks().slice().reverse().map((ask, idx) => (
-                          <div key={`ya-${idx}`} className="flex justify-between text-xs py-1.5 border-b border-gray-800/20">
+                          <div key={`ya-${idx}`} className="flex justify-between text-xs py-1.5 border-b border-gray-100">
                             <span className="text-[#FF3B57] font-semibold tabular-nums">{ask.price}¢</span>
-                            <span className="text-gray-400 tabular-nums">{ask.size}</span>
+                            <span className="text-gray-500 tabular-nums">{ask.size}</span>
                           </div>
                         ))}
                         {/* Bid/Ask Spread */}
-                        <div className="h-0.5 bg-gray-800 my-1" />
+                        <div className="h-[1px] bg-gray-200 my-1" />
                         {/* Bids (Buys) */}
                         {getYESBids().map((bid, idx) => (
-                          <div key={`yb-${idx}`} className="flex justify-between text-xs py-1.5 border-b border-gray-800/20">
+                          <div key={`yb-${idx}`} className="flex justify-between text-xs py-1.5 border-b border-gray-100">
                             <span className="text-[#00C853] font-semibold tabular-nums">{bid.price}¢</span>
-                            <span className="text-gray-400 tabular-nums">{bid.size}</span>
+                            <span className="text-gray-500 tabular-nums">{bid.size}</span>
                           </div>
                         ))}
                       </div>
@@ -550,18 +550,18 @@ export default function TradePage() {
                       <div className="flex flex-col gap-2">
                         {/* Asks (Sells) */}
                         {getNOAsks().slice().reverse().map((ask, idx) => (
-                          <div key={`na-${idx}`} className="flex justify-between text-xs py-1.5 border-b border-gray-800/20">
+                          <div key={`na-${idx}`} className="flex justify-between text-xs py-1.5 border-b border-gray-100">
                             <span className="text-[#FF3B57] font-semibold tabular-nums">{ask.price}¢</span>
-                            <span className="text-gray-400 tabular-nums">{ask.size}</span>
+                            <span className="text-gray-500 tabular-nums">{ask.size}</span>
                           </div>
                         ))}
                         {/* Bid/Ask Spread */}
-                        <div className="h-0.5 bg-gray-800 my-1" />
+                        <div className="h-[1px] bg-gray-200 my-1" />
                         {/* Bids (Buys) */}
                         {getNOBids().map((bid, idx) => (
-                          <div key={`nb-${idx}`} className="flex justify-between text-xs py-1.5 border-b border-gray-800/20">
+                          <div key={`nb-${idx}`} className="flex justify-between text-xs py-1.5 border-b border-gray-100">
                             <span className="text-[#00C853] font-semibold tabular-nums">{bid.price}¢</span>
-                            <span className="text-gray-400 tabular-nums">{bid.size}</span>
+                            <span className="text-gray-500 tabular-nums">{bid.size}</span>
                           </div>
                         ))}
                       </div>
@@ -574,20 +574,20 @@ export default function TradePage() {
         </div>
 
         {/* RIGHT COLUMN: Buy Panel, Positions, Ticker */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-8 pb-20 md:pb-0">
           
           {/* 4. ORDER / BUY PANEL */}
-          <div className="fixed bottom-0 left-0 right-0 z-30 bg-[#15191C] border-t border-gray-800 p-4 rounded-t-xl shadow-2xl md:relative md:bottom-auto md:left-auto md:right-auto md:z-auto md:border md:rounded-xl md:p-5 md:shadow-none">
+          <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-brand-border p-4 shadow-[0_-10px_30px_rgba(0,0,0,0.06)] rounded-t-2xl md:relative md:bottom-auto md:left-auto md:right-auto md:z-auto md:border md:rounded-2xl md:p-5 md:shadow-sm">
             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 hidden md:block">Place Order</h3>
 
             {/* YES/NO buttons */}
             <div className="grid grid-cols-2 gap-3 mb-4">
               <button
                 onClick={() => setSelectedSide("YES")}
-                className={`py-3 rounded-lg text-xs font-bold tracking-wider cursor-pointer border flex flex-col items-center gap-1 transition-all ${
+                className={`py-3 rounded-xl text-xs font-bold tracking-wider cursor-pointer border flex flex-col items-center gap-1 transition-all ${
                   selectedSide === "YES"
                     ? "bg-[#00C853] border-transparent text-white shadow-lg shadow-[#00C853]/15"
-                    : "bg-transparent border-gray-800 text-[#00C853] hover:bg-[#00C853]/5"
+                    : "bg-transparent border-brand-border text-[#00C853] hover:bg-[#00C853]/5"
                 }`}
               >
                 <span>YES</span>
@@ -596,10 +596,10 @@ export default function TradePage() {
 
               <button
                 onClick={() => setSelectedSide("NO")}
-                className={`py-3 rounded-lg text-xs font-bold tracking-wider cursor-pointer border flex flex-col items-center gap-1 transition-all ${
+                className={`py-3 rounded-xl text-xs font-bold tracking-wider cursor-pointer border flex flex-col items-center gap-1 transition-all ${
                   selectedSide === "NO"
                     ? "bg-[#FF3B57] border-transparent text-white shadow-lg shadow-[#FF3B57]/15"
-                    : "bg-transparent border-gray-800 text-[#FF3B57] hover:bg-[#FF3B57]/5"
+                    : "bg-transparent border-brand-border text-[#FF3B57] hover:bg-[#FF3B57]/5"
                 }`}
               >
                 <span>NO</span>
@@ -609,7 +609,7 @@ export default function TradePage() {
 
             {/* Input USD amount */}
             <div className="mb-4">
-              <label className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 block">
+              <label className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">
                 Amount (USDC)
               </label>
               <div className="relative">
@@ -618,9 +618,9 @@ export default function TradePage() {
                   value={investAmount}
                   onChange={(e) => setInvestAmount(e.target.value)}
                   placeholder="0.00"
-                  className="w-full bg-[#0D0F11] border border-gray-800 rounded-lg py-2.5 px-3 focus:outline-none focus:border-gray-700 text-sm font-bold text-white tabular-nums"
+                  className="w-full bg-gray-50 border border-brand-border rounded-xl py-2.5 px-3 focus:outline-none focus:border-brand-dark focus:bg-white text-sm font-bold text-brand-dark tabular-nums"
                 />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-500">USDC</span>
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">USDC</span>
               </div>
 
               {/* Quick Select Chips */}
@@ -629,14 +629,14 @@ export default function TradePage() {
                   <button
                     key={amt}
                     onClick={() => setInvestAmount(String(amt))}
-                    className="px-2.5 py-1 bg-[#0D0F11] hover:bg-gray-800 border border-gray-800 rounded-md text-[10px] font-bold text-gray-400 transition-colors cursor-pointer"
+                    className="px-2.5 py-1 bg-gray-50 hover:bg-gray-100 border border-brand-border rounded-md text-[10px] font-bold text-gray-500 transition-colors cursor-pointer"
                   >
                     ${amt}
                   </button>
                 ))}
                 <button
                   onClick={() => setDemoBalance(1000.00)} // Reset demo balance helper if user goes dry
-                  className="px-2.5 py-1 bg-[#0D0F11] hover:bg-gray-800 border border-gray-800 rounded-md text-[10px] font-bold text-[#00C853] transition-colors cursor-pointer ml-auto"
+                  className="px-2.5 py-1 bg-gray-50 hover:bg-gray-100 border border-brand-border rounded-md text-[10px] font-bold text-[#00C853] transition-colors cursor-pointer ml-auto"
                 >
                   Refill
                 </button>
@@ -648,26 +648,26 @@ export default function TradePage() {
               <motion.div
                 initial={{ opacity: 0, y: -5 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-[#0D0F11] border border-gray-800 rounded-lg p-3.5 mb-4 text-xs flex flex-col gap-2.5"
+                className="bg-gray-50 border border-brand-border rounded-xl p-3.5 mb-4 text-xs flex flex-col gap-2.5"
               >
-                <div className="flex justify-between text-gray-400">
+                <div className="flex justify-between text-gray-500">
                   <span>Price per Share:</span>
-                  <span className="font-semibold text-white">{pricePerShare}¢</span>
+                  <span className="font-semibold text-brand-dark">{pricePerShare}¢</span>
                 </div>
-                <div className="flex justify-between text-gray-400">
+                <div className="flex justify-between text-gray-500">
                   <span>Shares to Buy:</span>
-                  <span className="font-bold text-white tabular-nums">
+                  <span className="font-bold text-brand-dark tabular-nums">
                     {sharesCount.toLocaleString(undefined, { maximumFractionDigits: 2 })}
                   </span>
                 </div>
-                <div className="h-[1px] bg-gray-800" />
-                <div className="flex justify-between text-gray-400">
+                <div className="h-[1px] bg-gray-200" />
+                <div className="flex justify-between text-gray-500">
                   <span>Potential Payout:</span>
                   <span className="font-bold text-[#00C853] tabular-nums">
                     ${potentialPayout.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
-                <div className="flex justify-between text-gray-400">
+                <div className="flex justify-between text-gray-500">
                   <span>Potential Profit:</span>
                   <span className="font-semibold text-[#00C853] tabular-nums">
                     +${potentialProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ({profitPercent.toFixed(1)}%)
@@ -680,12 +680,12 @@ export default function TradePage() {
             <button
               onClick={handleBuy}
               disabled={!investAmount}
-              className={`w-full py-3.5 rounded-lg font-bold text-xs uppercase tracking-wider transition-all duration-200 cursor-pointer ${
+              className={`w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 cursor-pointer ${
                 investAmount
                   ? selectedSide === "YES"
                     ? "bg-[#00C853] hover:bg-[#00b24a] text-white"
                     : "bg-[#FF3B57] hover:bg-[#eb2c48] text-white"
-                  : "bg-gray-800 text-gray-600 cursor-not-allowed"
+                  : "bg-gray-100 text-gray-400 cursor-not-allowed"
               }`}
             >
               {investAmount ? `Buy ${selectedSide} for $${investAmount}` : `Enter Amount`}
@@ -693,10 +693,10 @@ export default function TradePage() {
           </div>
 
           {/* 6. YOUR POSITIONS */}
-          <div className="bg-[#15191C] border border-gray-800 rounded-xl p-5">
+          <div className="bg-white border border-brand-border rounded-2xl p-5 shadow-sm">
             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Your Positions</h3>
             {positions.length === 0 ? (
-              <div className="text-center py-6 text-xs text-gray-500 font-medium">
+              <div className="text-center py-6 text-xs text-gray-400 font-medium">
                 You have no positions in this market
               </div>
             ) : (
@@ -708,28 +708,28 @@ export default function TradePage() {
                   const pnlPercent = (pnl / pos.invested) * 100;
 
                   return (
-                    <div key={pos.id} className="bg-[#0D0F11] border border-gray-800 rounded-lg p-3 flex flex-col gap-2">
+                    <div key={pos.id} className="bg-gray-50 border border-brand-border rounded-xl p-3 flex flex-col gap-2">
                       <div className="flex items-center justify-between text-xs">
                         <span className={`px-2 py-0.5 rounded-full font-extrabold text-[9px] uppercase ${
                           pos.side === "YES" ? "bg-[#00C853]/10 text-[#00C853]" : "bg-[#FF3B57]/10 text-[#FF3B57]"
                         }`}>
                           {pos.side}
                         </span>
-                        <span className="text-gray-500 font-semibold">Ends: {formatTime(pos.windowEnd)}</span>
+                        <span className="text-gray-400 font-semibold">Ends: {formatTime(pos.windowEnd)}</span>
                       </div>
                       
                       <div className="grid grid-cols-2 gap-y-2 text-[10px] text-gray-400 mt-1">
                         <div>
                           <div>Shares</div>
-                          <div className="text-white font-bold tabular-nums">{Math.round(pos.shares)}</div>
+                          <div className="text-brand-dark font-bold tabular-nums">{Math.round(pos.shares)}</div>
                         </div>
                         <div>
                           <div>Avg Price</div>
-                          <div className="text-white font-bold tabular-nums">{pos.avgPrice}¢</div>
+                          <div className="text-brand-dark font-bold tabular-nums">{pos.avgPrice}¢</div>
                         </div>
                         <div>
                           <div>Current Value</div>
-                          <div className="text-white font-bold tabular-nums">${currentValue.toFixed(2)}</div>
+                          <div className="text-brand-dark font-bold tabular-nums">${currentValue.toFixed(2)}</div>
                         </div>
                         <div>
                           <div>Unrealized P&L</div>
@@ -746,10 +746,10 @@ export default function TradePage() {
           </div>
 
           {/* 7. ACTIVITY FEED */}
-          <div className="bg-[#15191C] border border-gray-800 rounded-xl overflow-hidden">
+          <div className="bg-white border border-brand-border rounded-2xl overflow-hidden shadow-sm">
             <button
               onClick={() => setIsActivityOpen(!isActivityOpen)}
-              className="w-full px-6 py-4 flex items-center justify-between text-left font-bold text-xs uppercase tracking-wider text-gray-400 hover:text-white border-b border-gray-800 focus:outline-none cursor-pointer"
+              className="w-full px-6 py-4 flex items-center justify-between text-left font-bold text-xs uppercase tracking-wider text-gray-400 hover:text-brand-dark border-b border-brand-border focus:outline-none cursor-pointer"
             >
               <span>Live Ticker Feed</span>
               <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isActivityOpen ? "rotate-180" : ""}`} />
@@ -772,17 +772,17 @@ export default function TradePage() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
                           transition={{ duration: 0.25 }}
-                          className="flex items-center justify-between text-[11px] border-b border-gray-800/40 pb-2 last:border-b-0"
+                          className="flex items-center justify-between text-[11px] border-b border-gray-100 pb-2 last:border-b-0"
                         >
-                          <div className="flex items-center gap-1.5">
-                            <span className="font-semibold text-gray-300">{item.address}</span>
-                            <span className="text-gray-500">bought</span>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="font-semibold text-gray-700">{item.address}</span>
+                            <span className="text-gray-400">bought</span>
                             <span className={`font-extrabold ${item.side === "YES" ? "text-[#00C853]" : "text-[#FF3B57]"}`}>
                               {item.amount} {item.side}
                             </span>
-                            <span className="text-gray-500">@ {item.price}¢</span>
+                            <span className="text-gray-400">@ {item.price}¢</span>
                           </div>
-                          <span className="text-gray-500 tabular-nums">{item.timeAgo}</span>
+                          <span className="text-gray-400 tabular-nums">{item.timeAgo}</span>
                         </motion.div>
                       ))}
                     </AnimatePresence>
@@ -799,36 +799,36 @@ export default function TradePage() {
         <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Related Markets</h2>
         <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-none">
           {/* Market 1 */}
-          <div className="bg-[#15191C] border border-gray-800 rounded-xl p-4 min-w-[280px] flex flex-col justify-between gap-4">
+          <div className="bg-white border border-brand-border rounded-2xl p-4 min-w-[280px] flex flex-col justify-between gap-4 shadow-sm hover:shadow-premium transition-all duration-300">
             <div>
-              <span className="text-[9px] font-bold text-gray-500 uppercase tracking-wider">Crypto &gt; Ethereum</span>
-              <h4 className="text-xs font-bold text-white mt-1.5">Will Ethereum resolve above $3,450.00 at {formatTime(timeWindow.end)}?</h4>
+              <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Crypto &gt; Ethereum</span>
+              <h4 className="text-xs font-bold text-brand-dark mt-1.5">Will Ethereum resolve above $3,450.00 at {formatTime(timeWindow.end)}?</h4>
             </div>
-            <div className="flex justify-between items-center text-xs mt-2 pt-2 border-t border-gray-800/50">
+            <div className="flex justify-between items-center text-xs mt-2 pt-2 border-t border-gray-100">
               <span className="text-gray-400">Probability</span>
               <span className="text-[#00C853] font-bold">54% YES</span>
             </div>
           </div>
 
           {/* Market 2 */}
-          <div className="bg-[#15191C] border border-gray-800 rounded-xl p-4 min-w-[280px] flex flex-col justify-between gap-4">
+          <div className="bg-white border border-brand-border rounded-2xl p-4 min-w-[280px] flex flex-col justify-between gap-4 shadow-sm hover:shadow-premium transition-all duration-300">
             <div>
-              <span className="text-[9px] font-bold text-gray-500 uppercase tracking-wider">Crypto &gt; Solana</span>
-              <h4 className="text-xs font-bold text-white mt-1.5">Will Solana resolve above $145.50 at {formatTime(timeWindow.end)}?</h4>
+              <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Crypto &gt; Solana</span>
+              <h4 className="text-xs font-bold text-brand-dark mt-1.5">Will Solana resolve above $145.50 at {formatTime(timeWindow.end)}?</h4>
             </div>
-            <div className="flex justify-between items-center text-xs mt-2 pt-2 border-t border-gray-800/50">
+            <div className="flex justify-between items-center text-xs mt-2 pt-2 border-t border-gray-100">
               <span className="text-gray-400">Probability</span>
               <span className="text-[#FF3B57] font-bold">42% YES</span>
             </div>
           </div>
 
           {/* Market 3 */}
-          <div className="bg-[#15191C] border border-gray-800 rounded-xl p-4 min-w-[280px] flex flex-col justify-between gap-4">
+          <div className="bg-white border border-brand-border rounded-2xl p-4 min-w-[280px] flex flex-col justify-between gap-4 shadow-sm hover:shadow-premium transition-all duration-300">
             <div>
-              <span className="text-[9px] font-bold text-gray-500 uppercase tracking-wider">Crypto &gt; Bitcoin</span>
-              <h4 className="text-xs font-bold text-white mt-1.5">Will Bitcoin resolve above $64,300.00 in next window?</h4>
+              <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Crypto &gt; Bitcoin</span>
+              <h4 className="text-xs font-bold text-brand-dark mt-1.5">Will Bitcoin resolve above $64,300.00 in next window?</h4>
             </div>
-            <div className="flex justify-between items-center text-xs mt-2 pt-2 border-t border-gray-800/50">
+            <div className="flex justify-between items-center text-xs mt-2 pt-2 border-t border-gray-100">
               <span className="text-gray-400">Probability</span>
               <span className="text-[#00C853] font-bold">50% YES</span>
             </div>
@@ -838,13 +838,13 @@ export default function TradePage() {
 
       {/* RESOLVED TRADE HISTORY TABLE */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-[#15191C] border border-gray-800 rounded-xl p-6 shadow-sm overflow-hidden">
+        <div className="bg-white border border-brand-border rounded-2xl p-6 shadow-sm overflow-hidden">
           <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Resolved Markets History</h2>
           
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-gray-800 text-gray-500 font-bold uppercase tracking-wider">
+                <tr className="border-b border-brand-border text-gray-400 font-bold uppercase tracking-wider">
                   <th className="pb-3 pr-4">Expiry Time</th>
                   <th className="pb-3 px-4">Market Question</th>
                   <th className="pb-3 px-4">Invested</th>
@@ -856,14 +856,14 @@ export default function TradePage() {
               </thead>
               <tbody>
                 {resolvedTrades.map((trade) => (
-                  <tr key={trade.id} className="border-b border-gray-800/20 hover:bg-gray-800/20 transition-colors">
+                  <tr key={trade.id} className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
                     <td className="py-4 pr-4 text-gray-500 font-medium">
                       {new Date(trade.timestamp).toLocaleTimeString()}
                     </td>
-                    <td className="py-4 px-4 text-white font-medium max-w-sm truncate">
+                    <td className="py-4 px-4 text-brand-dark font-medium max-w-sm truncate">
                       {trade.marketQuestion}
                     </td>
-                    <td className="py-4 px-4 text-gray-300 font-medium">${trade.amount.toFixed(2)}</td>
+                    <td className="py-4 px-4 text-gray-600 font-medium">${trade.amount.toFixed(2)}</td>
                     <td className="py-4 px-4 font-semibold">
                       <span className={`px-2 py-0.5 rounded-md text-[9px] font-bold ${
                         trade.side === "YES" ? "bg-[#00C853]/10 text-[#00C853]" : "bg-[#FF3B57]/10 text-[#FF3B57]"
@@ -871,13 +871,13 @@ export default function TradePage() {
                         {trade.side}
                       </span>
                     </td>
-                    <td className="py-4 px-4 text-gray-400 font-medium">{trade.avgPrice}¢</td>
+                    <td className="py-4 px-4 text-gray-500 font-medium">{trade.avgPrice}¢</td>
                     <td className="py-4 px-4">
                       <span className={`font-bold ${trade.result === "WIN" ? "text-[#00C853]" : "text-[#FF3B57]"}`}>
                         {trade.result}
                       </span>
                     </td>
-                    <td className="py-4 pl-4 text-right font-bold text-white tabular-nums">
+                    <td className="py-4 pl-4 text-right font-bold text-brand-dark tabular-nums">
                       ${trade.payout.toFixed(2)}
                     </td>
                   </tr>
@@ -890,18 +890,18 @@ export default function TradePage() {
 
       {/* 9. RULES ACCORDION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-[#15191C] border border-gray-800 rounded-xl p-6">
+        <div className="bg-white border border-brand-border rounded-2xl p-6 shadow-sm">
           <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Trading Rules & Information</h2>
           
           <div className="flex flex-col">
             {/* Rule 1 */}
-            <div className="border-b border-gray-800 py-4">
+            <div className="border-b border-brand-border py-4">
               <button
                 onClick={() => setFaqOpenIndex(faqOpenIndex === 0 ? null : 0)}
-                className="w-full flex items-center justify-between text-left font-bold text-xs uppercase tracking-wider text-gray-300 hover:text-white py-1 cursor-pointer focus:outline-none"
+                className="w-full flex items-center justify-between text-left font-bold text-xs uppercase tracking-wider text-gray-500 hover:text-brand-dark py-1 cursor-pointer focus:outline-none"
               >
                 <span>How is this market resolved?</span>
-                <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${faqOpenIndex === 0 ? "rotate-180" : ""}`} />
+                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${faqOpenIndex === 0 ? "rotate-180" : ""}`} />
               </button>
               <AnimatePresence initial={false}>
                 {faqOpenIndex === 0 && (
@@ -909,7 +909,7 @@ export default function TradePage() {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden text-xs text-gray-400 pt-2.5 leading-relaxed"
+                    className="overflow-hidden text-xs text-gray-500 pt-2.5 leading-relaxed"
                   >
                     Contracts settle based on the official Binance BTCUSDT spot ticker price. The market locks a reference price at the start of the 5-minute interval. If the final price when the timer reaches 0 is higher than the reference price, YES resolves to $1.00 and NO to $0.00.
                   </motion.div>
@@ -918,13 +918,13 @@ export default function TradePage() {
             </div>
 
             {/* Rule 2 */}
-            <div className="border-b border-gray-800 py-4">
+            <div className="border-b border-brand-border py-4">
               <button
                 onClick={() => setFaqOpenIndex(faqOpenIndex === 1 ? null : 1)}
-                className="w-full flex items-center justify-between text-left font-bold text-xs uppercase tracking-wider text-gray-300 hover:text-white py-1 cursor-pointer focus:outline-none"
+                className="w-full flex items-center justify-between text-left font-bold text-xs uppercase tracking-wider text-gray-500 hover:text-brand-dark py-1 cursor-pointer focus:outline-none"
               >
                 <span>What happens if the price is exactly equal?</span>
-                <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${faqOpenIndex === 1 ? "rotate-180" : ""}`} />
+                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${faqOpenIndex === 1 ? "rotate-180" : ""}`} />
               </button>
               <AnimatePresence initial={false}>
                 {faqOpenIndex === 1 && (
@@ -932,7 +932,7 @@ export default function TradePage() {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden text-xs text-gray-400 pt-2.5 leading-relaxed"
+                    className="overflow-hidden text-xs text-gray-500 pt-2.5 leading-relaxed"
                   >
                     If the settling spot price is exactly equal to the locked reference price down to the cent, the contract resolves as a tie, and the invested dollars are fully refunded to the user balance.
                   </motion.div>
@@ -944,10 +944,10 @@ export default function TradePage() {
             <div className="py-4">
               <button
                 onClick={() => setFaqOpenIndex(faqOpenIndex === 2 ? null : 2)}
-                className="w-full flex items-center justify-between text-left font-bold text-xs uppercase tracking-wider text-gray-300 hover:text-white py-1 cursor-pointer focus:outline-none"
+                className="w-full flex items-center justify-between text-left font-bold text-xs uppercase tracking-wider text-gray-500 hover:text-brand-dark py-1 cursor-pointer focus:outline-none"
               >
                 <span>What is the data source?</span>
-                <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${faqOpenIndex === 2 ? "rotate-180" : ""}`} />
+                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${faqOpenIndex === 2 ? "rotate-180" : ""}`} />
               </button>
               <AnimatePresence initial={false}>
                 {faqOpenIndex === 2 && (
@@ -955,7 +955,7 @@ export default function TradePage() {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden text-xs text-gray-400 pt-2.5 leading-relaxed"
+                    className="overflow-hidden text-xs text-gray-500 pt-2.5 leading-relaxed"
                   >
                     This demo connects directly to Binance&apos;s live WebSocket data feed. Prices represent the spot value of BTCUSDT in US Dollars.
                   </motion.div>

@@ -28,17 +28,17 @@ export default function ProbabilityChart({ data, loading, error, side }: Probabi
       width: containerRef.current.clientWidth,
       height: 280,
       layout: {
-        background: { type: ColorType.Solid, color: "#0D0F11" },
-        textColor: "#9CA3AF", // gray-400
+        background: { type: ColorType.Solid, color: "#ffffff" },
+        textColor: "#6B7280", // gray-500
         fontFamily: "Inter, sans-serif",
       },
       grid: {
-        vertLines: { color: "#1E242C" },
-        horzLines: { color: "#1E242C" },
+        vertLines: { color: "#eeeeee" },
+        horzLines: { color: "#eeeeee" },
       },
       rightPriceScale: {
         borderVisible: false,
-        textColor: "#9CA3AF",
+        textColor: "#374151", // gray-700
         entireTextOnly: true,
       },
       timeScale: {
@@ -48,12 +48,12 @@ export default function ProbabilityChart({ data, loading, error, side }: Probabi
       },
       crosshair: {
         vertLine: {
-          color: "#4B5563", // gray-600
+          color: "#9ca3af", // gray-400
           width: 1,
           style: 3, // dashed
         },
         horzLine: {
-          color: "#4B5563",
+          color: "#9ca3af",
           width: 1,
           style: 3,
         },
@@ -67,7 +67,7 @@ export default function ProbabilityChart({ data, loading, error, side }: Probabi
     const series = chart.addSeries(AreaSeries, {
       lineColor: seriesColor,
       topColor: topGradient,
-      bottomColor: "rgba(13, 15, 17, 0)",
+      bottomColor: "rgba(255, 255, 255, 0)",
       lineWidth: 2,
       priceFormat: {
         type: "custom",
@@ -114,9 +114,9 @@ export default function ProbabilityChart({ data, loading, error, side }: Probabi
   }, [data]);
 
   return (
-    <div className="relative w-full h-[280px] bg-[#0D0F11] rounded-xl border border-gray-800 p-4 shadow-sm overflow-hidden">
+    <div className="relative w-full h-[280px] bg-white rounded-xl border border-brand-border p-4 shadow-sm overflow-hidden">
       {loading && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#0D0F11]/80 backdrop-blur-xs">
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/85 backdrop-blur-xs">
           <span className="flex h-6 w-6 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-green opacity-75"></span>
             <span className="relative inline-flex rounded-full h-6 w-6 bg-brand-green/30"></span>
