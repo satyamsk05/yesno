@@ -29,7 +29,7 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="py-24 max-w-7xl mx-auto px-6">
+    <section id="how-it-works" className="py-24 md:py-32 max-w-7xl mx-auto px-6">
       <div className="text-center mb-16">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
@@ -46,7 +46,7 @@ export default function HowItWorks() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-3xl md:text-4xl font-extrabold tracking-tight text-brand-dark"
+          className="text-3xl md:text-4xl font-semibold tracking-tight text-brand-dark"
         >
           Trade in 3 simple steps
         </motion.h2>
@@ -62,8 +62,8 @@ export default function HowItWorks() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.15 }}
-              whileHover={{ y: -6, boxShadow: "0 20px 40px -15px rgba(0,0,0,0.06)" }}
-              className="bg-white rounded-2xl border border-brand-border p-8 relative flex flex-col items-start shadow-sm transition-all duration-300 group"
+              whileHover={{ y: -6, boxShadow: "0 20px 40px -15px rgba(0,0,0,0.08)" }}
+              className="bg-white rounded-2xl border border-brand-border p-8 relative flex flex-col items-start shadow-sm transition-all duration-300 group cursor-default"
             >
               {/* Step indicator */}
               <span className="absolute top-6 right-8 text-sm font-bold text-gray-200 group-hover:text-gray-300 transition-colors">
@@ -76,7 +76,7 @@ export default function HowItWorks() {
               </div>
 
               {/* Heading */}
-              <h3 className="text-xl font-bold text-brand-dark mb-3">
+              <h3 className="text-xl font-semibold tracking-tight text-brand-dark mb-3">
                 {step.title}
               </h3>
 

@@ -7,8 +7,8 @@ export default function Testimonials() {
   const companies = ["Binance", "Coinbase", "Kraken", "Bybit", "Uniswap", "OKX"];
 
   return (
-    <section className="bg-white border-y border-brand-border py-24 overflow-hidden">
-      <div className="max-w-4xl mx-auto px-6 flex flex-col items-center">
+    <section className="bg-white border-t border-b border-gray-200/70 py-24 md:py-32 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 flex flex-col items-center">
         {/* Testimonial Quote */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -22,7 +22,7 @@ export default function Testimonials() {
             <Quote className="w-5 h-5 text-gray-400 fill-gray-400" />
           </div>
 
-          <blockquote className="text-2xl md:text-3xl font-medium text-brand-dark tracking-tight leading-normal mb-8">
+          <blockquote className="text-2xl md:text-3xl font-medium tracking-tight text-brand-dark leading-normal mb-8 text-balance">
             &quot;PredictBTC has completely redefined how I capture quick market movements. The payouts are instant, the UX is unmatched, and there are no complicated options terms to decipher.&quot;
           </blockquote>
 
@@ -61,12 +61,12 @@ export default function Testimonials() {
             {companies.map((name, index) => (
               <motion.span
                 key={name}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 0.4 }}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 0.4, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.08 }}
                 whileHover={{ opacity: 0.8 }}
-                className="text-lg font-black tracking-tight text-gray-500 cursor-default select-none transition-opacity"
+                className="text-lg font-black tracking-tight text-gray-500 cursor-default select-none transition-all duration-200"
               >
                 {name}
               </motion.span>

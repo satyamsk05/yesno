@@ -16,7 +16,7 @@ function FAQItem({ question, answer, isOpen, onToggle }: FAQItemProps) {
     <div className="border-b border-brand-border py-5">
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between text-left font-bold text-brand-dark text-base md:text-lg hover:text-black transition-colors py-2 focus:outline-none cursor-pointer"
+        className="w-full flex items-center justify-between text-left font-semibold tracking-tight text-brand-dark text-base md:text-lg hover:text-black transition-colors py-2 focus:outline-none cursor-pointer"
       >
         <span>{question}</span>
         <motion.div
@@ -83,7 +83,7 @@ export default function FAQ() {
   };
 
   return (
-    <section id="faq" className="py-24 max-w-7xl mx-auto px-6">
+    <section id="faq" className="py-24 md:py-32 max-w-7xl mx-auto px-6">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         {/* Header Block */}
         <div className="lg:col-span-1">
@@ -101,7 +101,7 @@ export default function FAQ() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-3xl md:text-4xl font-extrabold tracking-tight text-brand-dark mb-4"
+            className="text-3xl md:text-4xl font-semibold tracking-tight text-brand-dark mb-4"
           >
             Frequently Asked Questions
           </motion.h2>

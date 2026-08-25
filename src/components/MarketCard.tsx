@@ -63,23 +63,33 @@ export default function MarketCard({ price, priceHistory, priceDirection }: Mark
   const chartHeight = 160;
   const padding = 10;
 
-  // Generate SVG path for sparkline
+  // Generate SVG path for sparkline with smooth bezier curves
   const getSvgPath = () => {
     if (priceHistory.length < 2) return "";
     const min = Math.min(...priceHistory);
     const max = Math.max(...priceHistory);
     const range = max - min || 1;
 
-    return priceHistory
-      .map((val, index) => {
-        const x = padding + (index * (chartWidth - padding * 2)) / (priceHistory.length - 1);
-        const y =
-          chartHeight -
-          padding -
-          ((val - min) / range) * (chartHeight - padding * 2);
-        return `${index === 0 ? "M" : "L"} ${x} ${y}`;
-      })
-      .join(" ");
+    const points = priceHistory.map((val, index) => {
+      const x = padding + (index * (chartWidth - padding * 2)) / (priceHistory.length - 1);
+      const y =
+        chartHeight -
+        padding -
+        ((val - min) / range) * (chartHeight - padding * 2);
+      return { x, y };
+    });
+
+    let d = `M ${points[0].x} ${points[0].y}`;
+    for (let i = 0; i < points.length - 1; i++) {
+      const p0 = points[i];
+      const p1 = points[i + 1];
+      const cpX1 = p0.x + (p1.x - p0.x) / 3;
+      const cpY1 = p0.y;
+      const cpX2 = p0.x + 2 * (p1.x - p0.x) / 3;
+      const cpY2 = p1.y;
+      d += ` C ${cpX1} ${cpY1}, ${cpX2} ${cpY2}, ${p1.x} ${p1.y}`;
+    }
+    return d;
   };
 
   // Generate SVG fill path for gradient background
@@ -117,16 +127,16 @@ export default function MarketCard({ price, priceHistory, priceDirection }: Mark
   const fillColorId = isTrendingUp ? "greenGradient" : "redGradient";
 
   return (
-    <section id="markets" className="py-20 md:py-24 max-w-7xl mx-auto px-6">
+    <section id="markets" className="py-24 md:py-32 max-w-7xl mx-auto px-6">
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
         className="w-full max-w-3xl mx-auto"
       >
         <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-brand-dark mb-4">
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-brand-dark mb-4">
             Active Prediction Market
           </h2>
           <p className="text-gray-600 max-w-md mx-auto">
@@ -135,14 +145,14 @@ export default function MarketCard({ price, priceHistory, priceDirection }: Mark
         </div>
 
         {/* The Card */}
-        <div className="bg-white rounded-2xl border border-brand-border shadow-subtle overflow-hidden hover:shadow-md transition-shadow duration-300">
+        <div className="bg-white rounded-2xl border border-brand-border shadow-premium overflow-hidden hover:shadow-premium-hover hover:-translate-y-1 transition-all duration-300">
           {/* Header */}
           <div className="p-6 border-b border-brand-border flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest">
                 Daily Price Target
               </span>
-              <h3 className="text-xl md:text-2xl font-bold text-brand-dark mt-1">
+              <h3 className="text-xl md:text-2xl font-semibold tracking-tight text-brand-dark mt-1">
                 BTC will be above $64,300.00
               </h3>
             </div>
@@ -226,9 +236,9 @@ export default function MarketCard({ price, priceHistory, priceDirection }: Mark
               {/* YES BUTTON */}
               <motion.button
                 onClick={handleVoteYes}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
-                className="relative overflow-hidden group py-4 px-6 rounded-2xl bg-brand-green hover:bg-[#00c95c] text-white flex flex-col items-center justify-center gap-0.5 shadow-sm transition-colors cursor-pointer"
+                className="relative overflow-hidden group py-4 px-6 rounded-2xl bg-brand-green hover:bg-[#00c95c] text-white flex flex-col items-center justify-center gap-0.5 shadow-sm hover:scale-[1.03] transition-all duration-200 cursor-pointer"
               >
                 <span className="text-xs font-bold uppercase tracking-wider opacity-90">
                   Buy YES
@@ -240,9 +250,9 @@ export default function MarketCard({ price, priceHistory, priceDirection }: Mark
               {/* NO BUTTON */}
               <motion.button
                 onClick={handleVoteNo}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
-                className="relative overflow-hidden group py-4 px-6 rounded-2xl bg-brand-red hover:bg-[#eb3329] text-white flex flex-col items-center justify-center gap-0.5 shadow-sm transition-colors cursor-pointer"
+                className="relative overflow-hidden group py-4 px-6 rounded-2xl bg-brand-red hover:bg-[#eb3329] text-white flex flex-col items-center justify-center gap-0.5 shadow-sm hover:scale-[1.03] transition-all duration-200 cursor-pointer"
               >
                 <span className="text-xs font-bold uppercase tracking-wider opacity-90">
                   Buy NO

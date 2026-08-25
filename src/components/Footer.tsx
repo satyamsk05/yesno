@@ -48,64 +48,66 @@ export default function Footer() {
       </div>
 
       {/* FINAL CTA SECTION */}
-      <div className="max-w-4xl mx-auto px-6 text-center py-24 border-b border-brand-border">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-3xl md:text-5xl font-black tracking-tight text-brand-dark mb-6"
-        >
-          Start trading BTC predictions today
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-base md:text-lg text-gray-500 max-w-md mx-auto mb-10 leading-relaxed text-balance"
-        >
-          Put your Bitcoin conviction to the test. Take your position with instant execution.
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 w-full sm:w-auto"
-        >
-          <motion.a
-            href="#markets"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-brand-dark text-white font-semibold flex items-center justify-center gap-1.5 hover:bg-black/95 transition-all shadow-md group"
+      <div className="max-w-7xl mx-auto px-6 py-24 md:py-32 border-b border-brand-border">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-3xl md:text-5xl font-bold tracking-tight text-brand-dark mb-6"
           >
-            Trade Now
-            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </motion.a>
-          <motion.a
-            href="#how-it-works"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white border border-brand-border text-gray-700 font-semibold flex items-center justify-center gap-2 hover:bg-gray-50 hover:text-brand-dark transition-all"
-          >
-            How it works
-          </motion.a>
-        </motion.div>
+            Start trading BTC predictions today
+          </motion.h2>
 
-        {/* Risk disclaimer */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-xs text-gray-400 max-w-lg mx-auto leading-relaxed"
-        >
-          Risk warning: Binary prediction contracts involve high risk. Price movements can be volatile and unpredictable. Trade only with funds you are prepared to lose.
-        </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-base md:text-lg text-gray-500 max-w-md mx-auto mb-10 leading-relaxed text-balance"
+          >
+            Put your Bitcoin conviction to the test. Take your position with instant execution.
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 w-full sm:w-auto"
+          >
+            <motion.a
+              href="#markets"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-brand-dark text-white font-semibold flex items-center justify-center gap-1.5 hover:bg-black/95 hover:scale-[1.03] transition-all duration-200 shadow-md group"
+            >
+              Trade Now
+              <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </motion.a>
+            <motion.a
+              href="#how-it-works"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white border border-brand-border text-gray-700 font-semibold flex items-center justify-center gap-2 hover:bg-gray-50 hover:text-brand-dark hover:scale-[1.03] transition-all duration-200"
+            >
+              How it works
+            </motion.a>
+          </motion.div>
+
+          {/* Risk disclaimer */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-xs text-gray-400 max-w-lg mx-auto leading-relaxed"
+          >
+            Risk warning: Binary prediction contracts involve high risk. Price movements can be volatile and unpredictable. Trade only with funds you are prepared to lose.
+          </motion.p>
+        </div>
       </div>
 
       {/* FOOTER LINKS GRID */}

@@ -25,6 +25,10 @@ const config: Config = {
       borderRadius: {
         '2xl': '16px',
       },
+      boxShadow: {
+        'premium': '0 20px 40px -15px rgba(0, 0, 0, 0.08)',
+        'premium-hover': '0 30px 60px -15px rgba(0, 0, 0, 0.12)',
+      },
     },
   },
   plugins: [],
