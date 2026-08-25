@@ -25,46 +25,54 @@ function randomInterval(min: number, max: number) {
 export default function FloatingTradesFeed() {
   const [ticks, setTicks] = useState<TradeTick[]>([]);
   const counterRef = useRef(0);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    // Spawn a new trade tick at random intervals between 600ms and 2200ms
     const spawnTick = () => {
       const id = ++counterRef.current;
-      const isUp = Math.random() > 0.45; // Slightly more bullish
-      setTicks((prev) => [
-        ...prev.slice(-5), // Keep at most 5 visible at once
-        { id, amount: randomAmount(), isUp },
-      ]);
+      const isUp = Math.random() > 0.45;
+      // Keep at most 1 active at a time so they never overlap
+      setTicks([{ id, amount: randomAmount(), isUp }]);
 
-      // Schedule next spawn
-      const nextIn = randomInterval(600, 2200);
+      const nextIn = randomInterval(1200, 2800);
       timeoutRef.current = setTimeout(spawnTick, nextIn);
     };
 
-    const timeoutRef = { current: setTimeout(spawnTick, 400) };
-    return () => clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(spawnTick, 600);
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, []);
 
-  // Remove a tick after its animation completes
   const removeTick = (id: number) => {
     setTicks((prev) => prev.filter((t) => t.id !== id));
   };
 
   return (
-    <div className="absolute left-2 bottom-8 z-10 flex flex-col-reverse gap-1 pointer-events-none select-none overflow-hidden" style={{ height: "160px", width: "64px" }}>
+    /*
+     * Wrapper is absolutely positioned below the chart.
+     * Each tick is absolutely positioned at bottom:0 and animates
+     * upward by translating Y — so only ONE is ever visible at a time,
+     * rising cleanly from bottom to top before the next one spawns.
+     */
+    <div
+      className="absolute left-3 bottom-6 z-10 pointer-events-none select-none"
+      style={{ width: 72, height: 160 }}
+    >
       <AnimatePresence>
         {ticks.map((tick) => (
           <motion.div
             key={tick.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: [0, 1, 1, 0], y: [-20, -55, -90, -130] }}
+            style={{ position: "absolute", bottom: 0, left: 0 }}
+            initial={{ opacity: 0, y: 0 }}
+            animate={{ opacity: [0, 1, 1, 0], y: [0, -40, -95, -155] }}
             transition={{
-              duration: 3.8,
+              duration: 4,
               ease: "easeOut",
-              times: [0, 0.15, 0.65, 1],
+              times: [0, 0.12, 0.65, 1],
             }}
             onAnimationComplete={() => removeTick(tick.id)}
-            className={`text-[10px] font-extrabold whitespace-nowrap ${
+            className={`text-[11px] font-extrabold whitespace-nowrap ${
               tick.isUp ? "text-[#00C853]" : "text-[#FF3B57]"
             }`}
           >
