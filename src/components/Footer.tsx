@@ -117,12 +117,19 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-2 md:grid-cols-5 gap-8">
         {/* Brand Block */}
         <div className="col-span-2 flex flex-col items-start gap-4">
-          <a href="#" className="flex items-center gap-0 select-none">
+          <a href="#" className="flex items-center gap-2 select-none">
+            <Image
+              src="/logo.png"
+              alt="YesnoBet"
+              width={36}
+              height={36}
+              className="w-9 h-9 rounded-xl object-cover"
+            />
             <span className="flex flex-col items-start leading-none">
-              <span className="text-[22px] font-black tracking-tighter text-[#0A0A0A] lowercase">
+              <span className="text-[18px] font-black tracking-tighter text-[#0A0A0A] lowercase">
                 yesno
               </span>
-              <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-gray-400 ml-0.5 -mt-0.5">
+              <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-gray-400 -mt-0.5">
                 — bet —
               </span>
             </span>

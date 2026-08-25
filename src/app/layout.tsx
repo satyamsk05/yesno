@@ -12,9 +12,11 @@ export const metadata: Metadata = {
   title: "YesnoBet — Will Bitcoin go up today?",
   description: "Trade Yes or No on BTC price direction. Real-time odds, instant settlement. YesnoBet — the smartest way to bet on crypto.",
   icons: {
-    icon: "/sitelogo.png",
-    shortcut: "/sitelogo.png",
-    apple: "/sitelogo.png",
+    icon: [
+      { url: "/logo.png", sizes: "any" },
+    ],
+    shortcut: "/logo.png",
+    apple: "/logo.png",
   },
 };
 
