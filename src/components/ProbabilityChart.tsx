@@ -1,32 +1,34 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { createChart, ColorType, IChartApi, ISeriesApi, AreaSeries, UTCTimestamp } from "lightweight-charts";
+import { createChart, ColorType, IChartApi, ISeriesApi, AreaSeries, UTCTimestamp, IPriceLine } from "lightweight-charts";
 
-interface ProbabilityPoint {
+interface PricePoint {
   time: number; // UNIX timestamp in seconds
-  value: number; // Probability between 0 and 100
+  value: number; // BTC Price in USD
 }
 
 interface ProbabilityChartProps {
-  data: ProbabilityPoint[];
+  data: PricePoint[];
   loading: boolean;
   error: string | null;
   side: "YES" | "NO"; // Color theme based on selected side
+  referencePrice: number; // Strike Price to Beat
 }
 
-export default function ProbabilityChart({ data, loading, error, side }: ProbabilityChartProps) {
+export default function ProbabilityChart({ data, loading, error, side, referencePrice }: ProbabilityChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<"Area"> | null>(null);
+  const priceLineRef = useRef<IPriceLine | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Initialize Lightweight Chart for Polymarket style
+    // Initialize Lightweight Chart for flat, clean style matching the screenshot
     const chart = createChart(containerRef.current, {
       width: containerRef.current.clientWidth,
-      height: 280,
+      height: 240,
       layout: {
         background: { type: ColorType.Solid, color: "#ffffff" },
         textColor: "#6B7280", // gray-500
@@ -60,9 +62,9 @@ export default function ProbabilityChart({ data, loading, error, side }: Probabi
       },
     });
 
-    // Create the area series matching Polymarket line graphs
-    const seriesColor = side === "YES" ? "#00C853" : "#FF3B57";
-    const topGradient = side === "YES" ? "rgba(0, 200, 83, 0.15)" : "rgba(255, 59, 87, 0.15)";
+    // Create the area series matching YFX/Pancake prediction layout
+    const seriesColor = side === "YES" ? "#2F80ED" : "#FF3B57"; // Blue/green for UP/YES, red for NO
+    const topGradient = side === "YES" ? "rgba(47, 128, 237, 0.12)" : "rgba(255, 59, 87, 0.12)";
 
     const series = chart.addSeries(AreaSeries, {
       lineColor: seriesColor,
@@ -70,17 +72,18 @@ export default function ProbabilityChart({ data, loading, error, side }: Probabi
       bottomColor: "rgba(255, 255, 255, 0)",
       lineWidth: 2,
       priceFormat: {
-        type: "custom",
-        formatter: (price: number) => `${Math.round(price)}%`,
+        type: "price",
+        precision: 2,
+        minMove: 0.01,
       },
     });
 
-    // Fix Y-axis range between 0 and 100 for probability
+    // Price scaling margins
     series.priceScale().applyOptions({
-      autoScale: false,
+      autoScale: true,
       scaleMargins: {
-        top: 0.1,
-        bottom: 0.1,
+        top: 0.15,
+        bottom: 0.15,
       },
     });
 
@@ -90,7 +93,7 @@ export default function ProbabilityChart({ data, loading, error, side }: Probabi
     // Responsive scaling resize handler
     const handleResize = () => {
       if (containerRef.current && chartRef.current) {
-        chartRef.current.resize(containerRef.current.clientWidth, 280);
+        chartRef.current.resize(containerRef.current.clientWidth, 240);
       }
     };
     window.addEventListener("resize", handleResize);
@@ -101,10 +104,35 @@ export default function ProbabilityChart({ data, loading, error, side }: Probabi
     };
   }, [side]); // Recreate series colors if user toggles YES/NO display color
 
+  // Draw or update the horizontal "Target" strike price line
+  useEffect(() => {
+    if (!seriesRef.current || referencePrice === 0) return;
+
+    // Remove previous target line if it exists
+    if (priceLineRef.current) {
+      try {
+        seriesRef.current.removePriceLine(priceLineRef.current);
+      } catch (e) {
+        console.error("Failed to remove old price line:", e);
+      }
+    }
+
+    // Create the horizontal target dashed line
+    const priceLine = seriesRef.current.createPriceLine({
+      price: referencePrice,
+      color: "#4b5563", // gray-600
+      lineWidth: 1,
+      lineStyle: 1, // Dashed
+      axisLabelVisible: true,
+      title: "Target",
+    });
+
+    priceLineRef.current = priceLine;
+  }, [referencePrice]);
+
   // Update chart data points
   useEffect(() => {
     if (seriesRef.current && data.length > 0) {
-      // Map data to lightweight-charts AreaData format
       const formatted = data.map((pt) => ({
         time: pt.time as UTCTimestamp,
         value: pt.value,
@@ -114,7 +142,7 @@ export default function ProbabilityChart({ data, loading, error, side }: Probabi
   }, [data]);
 
   return (
-    <div className="relative w-full h-[280px] bg-white rounded-xl border border-brand-border p-4 shadow-sm overflow-hidden">
+    <div className="relative w-full h-[240px] bg-white overflow-hidden">
       {loading && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/85 backdrop-blur-xs">
           <span className="flex h-6 w-6 relative">
@@ -125,7 +153,7 @@ export default function ProbabilityChart({ data, loading, error, side }: Probabi
       )}
 
       {error && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#0D0F11] text-xs text-brand-red font-medium">
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white text-xs text-brand-red font-medium">
           Error loading chart: {error}
         </div>
       )}
