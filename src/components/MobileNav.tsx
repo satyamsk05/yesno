@@ -88,21 +88,33 @@ export default function MobileNav() {
     <>
       {/* MOBILE BOTTOM NAVIGATION BAR */}
       <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-brand-border px-6 py-3.5 shadow-[0_-4px_25px_rgba(0,0,0,0.04)] flex items-center justify-around md:hidden select-none">
-        
+
+        {/* Single sliding indicator — always in DOM, just moves left/right */}
+        <motion.div
+          className="absolute bottom-3.5 h-8 bg-[#6C5CE7] rounded-full pointer-events-none"
+          animate={{
+            left: isHomeActive
+              ? "calc(16.67% - 34px)"
+              : isMarketActive
+              ? "calc(50% - 34px)"
+              : "calc(83.33% - 34px)",
+            width: isHomeActive
+              ? "72px"
+              : isMarketActive
+              ? "80px"
+              : "76px",
+          }}
+          transition={{ type: "spring", stiffness: 420, damping: 36 }}
+          style={{ translateY: 0 }}
+        />
+
         {/* Tab 1: Home */}
         <Link href="/">
-          <button className="relative flex items-center gap-1.5 focus:outline-none transition-all cursor-pointer">
-            {isHomeActive ? (
-              <motion.div
-                layoutId="active-mobile-tab"
-                className="absolute inset-0 bg-[#6C5CE7] rounded-full -mx-4 -my-2 px-4 py-2"
-                transition={{ type: "spring", stiffness: 380, damping: 30 }}
-              />
-            ) : null}
-            <span className={`relative z-10 flex items-center gap-1.5 font-bold text-xs tracking-wide ${
+          <button className="relative flex items-center gap-1.5 focus:outline-none cursor-pointer h-8 px-3">
+            <span className={`relative z-10 flex items-center gap-1.5 font-bold text-xs tracking-wide transition-colors duration-200 ${
               isHomeActive ? "text-white" : "text-gray-400 hover:text-gray-600"
             }`}>
-              <Home className="w-4.5 h-4.5" />
+              <Home className="w-4 h-4" />
               {isHomeActive && <span>Home</span>}
             </span>
           </button>
@@ -110,18 +122,11 @@ export default function MobileNav() {
 
         {/* Tab 2: Market */}
         <Link href="/trade">
-          <button className="relative flex items-center gap-1.5 focus:outline-none transition-all cursor-pointer">
-            {isMarketActive ? (
-              <motion.div
-                layoutId="active-mobile-tab"
-                className="absolute inset-0 bg-[#6C5CE7] rounded-full -mx-4 -my-2 px-4 py-2"
-                transition={{ type: "spring", stiffness: 380, damping: 30 }}
-              />
-            ) : null}
-            <span className={`relative z-10 flex items-center gap-1.5 font-bold text-xs tracking-wide ${
+          <button className="relative flex items-center gap-1.5 focus:outline-none cursor-pointer h-8 px-3">
+            <span className={`relative z-10 flex items-center gap-1.5 font-bold text-xs tracking-wide transition-colors duration-200 ${
               isMarketActive ? "text-white" : "text-gray-400 hover:text-gray-600"
             }`}>
-              <Compass className="w-4.5 h-4.5" />
+              <Compass className="w-4 h-4" />
               {isMarketActive && <span>Market</span>}
             </span>
           </button>
@@ -130,19 +135,12 @@ export default function MobileNav() {
         {/* Tab 3: Profile */}
         <button
           onClick={() => setIsProfileOpen(true)}
-          className="relative flex items-center gap-1.5 focus:outline-none transition-all cursor-pointer"
+          className="relative flex items-center gap-1.5 focus:outline-none cursor-pointer h-8 px-3"
         >
-          {isProfileOpen ? (
-            <motion.div
-              layoutId="active-mobile-tab"
-              className="absolute inset-0 bg-[#6C5CE7] rounded-full -mx-4 -my-2 px-4 py-2"
-              transition={{ type: "spring", stiffness: 380, damping: 30 }}
-            />
-          ) : null}
-          <span className={`relative z-10 flex items-center gap-1.5 font-bold text-xs tracking-wide ${
+          <span className={`relative z-10 flex items-center gap-1.5 font-bold text-xs tracking-wide transition-colors duration-200 ${
             isProfileOpen ? "text-white" : "text-gray-400 hover:text-gray-600"
           }`}>
-            <User className="w-4.5 h-4.5" />
+            <User className="w-4 h-4" />
             {isProfileOpen && <span>Profile</span>}
           </span>
         </button>
