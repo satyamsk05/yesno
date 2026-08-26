@@ -54,27 +54,27 @@ export default function FAQ() {
     {
       question: "What is a binary prediction market?",
       answer:
-        "A binary prediction market is a market where the payout is a fixed amount (usually $1.00) or nothing depending on the outcome of a future event. In our case, you trade on whether Bitcoin's price exceeds a certain price target by a specific target resolution time.",
+        "A binary prediction market is a platform where the payout is a fixed amount or nothing depending on the outcome of a future event. In our case, you place predictions on whether Bitcoin's price will go UP or DOWN over specified timeframes (e.g. 1 minute, 5 minutes).",
     },
     {
       question: "How are the payouts calculated?",
       answer:
-        "Each contract is priced between 1¢ and 99¢ based on current probability. If you buy a YES contract at 58¢ and it resolves successfully, your contract yields $1.00, yielding a 42¢ profit per contract. If the outcome is false, the contract resolves to 0¢.",
+        "All winning predictions receive a fixed payout of 1.8x of their stake (representing an 80% net return). For example, if you place a ₹100 bet on UP and win, you will be credited with ₹180 in your wallet. If your prediction is wrong, the stake is lost.",
     },
     {
       question: "Where does the pricing and settlement index come from?",
       answer:
-        "All markets settle based on the aggregated, volume-weighted average price (VWAP) index across major spot exchanges like Binance, Coinbase, and Kraken, recorded at the exact millisecond of resolution. This feed is publicly verifiable.",
+        "All predictions settle dynamically using real-time spot index feeds from the Binance public API (https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT). It is queried at the exact expiration timestamp of the round to guarantee absolute transparency.",
     },
     {
       question: "What are the platform fees?",
       answer:
-        "We charge a flat 1% fee on winning positions upon resolution. There are no fees for placing trades, cancelling orders, or holding contracts. Creating and listing custom markets remains free.",
+        "Our platform fees are flat 0%. You keep 100% of your earnings to continue trading on future prediction markets.",
     },
     {
-      question: "Do I need a real Web3 wallet to trade here?",
+      question: "Do I need real money to start trading?",
       answer:
-        "For this interactive UI showcase, you can play around with live simulated funds. No actual wallet connection or crypto is required. Production deployments will support major wallets like MetaMask, Coinbase Wallet, and WalletConnect.",
+        "No, this platform acts as a prediction simulator. All registered users start with a free virtual INR balance of ₹10,000. You can simulate deposits and withdrawals on the deposit page to manage your play balance.",
     },
   ];
 

@@ -5,14 +5,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 interface HeroProps {
-  price: number;
+  price: number | null;
   priceDirection: "up" | "down" | null;
+  loading: boolean;
+  error: boolean;
 }
 
-export default function Hero({ price, priceDirection }: HeroProps) {
+export default function Hero({ price, priceDirection, loading, error }: HeroProps) {
 
   // Format currency
-  const formatPrice = (value: number) => {
+  const formatPrice = (value: number | null) => {
+    if (value === null) return "$0.00";
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
@@ -39,13 +42,13 @@ export default function Hero({ price, priceDirection }: HeroProps) {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-brand-border shadow-sm text-xs font-semibold text-gray-800 mb-6"
+            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/50 shadow-sm text-xs font-semibold text-emerald-800 mb-6 select-none"
           >
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-red opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-red animate-pulse"></span>
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            Live · BTC/USD Market
+            Live BTC/USD Price Feed
           </motion.div>
 
           {/* Headline */}
@@ -75,7 +78,7 @@ export default function Hero({ price, priceDirection }: HeroProps) {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 w-full sm:w-auto"
           >
-            <Link href="/trade" passHref legacyBehavior>
+            <Link href="/markets" passHref legacyBehavior>
               <motion.a
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.95 }}
@@ -105,29 +108,47 @@ export default function Hero({ price, priceDirection }: HeroProps) {
           >
             <div className="text-xs font-semibold text-gray-500 uppercase tracking-widest flex items-center gap-2">
               <span className="relative flex h-2 w-2">
-                <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-brand-green opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green"></span>
+                {error ? (
+                  <>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                  </>
+                ) : (
+                  <>
+                    <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-brand-green opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green"></span>
+                  </>
+                )}
               </span>
-              Live BTC Price
+              <span>Live BTC Price</span>
+              {error && (
+                <span className="text-[9px] font-bold text-amber-600 bg-amber-500/10 px-1.5 py-0.5 rounded uppercase tracking-wider animate-pulse">
+                  reconnecting
+                </span>
+              )}
             </div>
 
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={price}
-                initial={{ y: priceDirection === "up" ? 4 : -4, opacity: 0.8 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className={`text-3xl md:text-4xl font-bold tabular-nums tracking-tight transition-colors duration-300 ${
-                  priceDirection === "up"
-                    ? "text-brand-green"
-                    : priceDirection === "down"
-                    ? "text-brand-red"
-                    : "text-brand-dark"
-                }`}
-              >
-                {formatPrice(price)}
-              </motion.span>
-            </AnimatePresence>
+            {loading ? (
+              <div className="h-[40px] w-40 animate-pulse rounded-lg mt-1" style={{ backgroundColor: "#F3F3F3" }} />
+            ) : (
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={price ?? "loading"}
+                  initial={{ y: priceDirection === "up" ? 4 : -4, opacity: 0.8 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  className={`text-3xl md:text-4xl font-bold tabular-nums tracking-tight transition-colors duration-300 ${
+                    priceDirection === "up"
+                      ? "text-brand-green"
+                      : priceDirection === "down"
+                      ? "text-brand-red"
+                      : "text-brand-dark"
+                  }`}
+                >
+                  {formatPrice(price)}
+                </motion.span>
+              </AnimatePresence>
+            )}
           </motion.div>
         </div>
       </div>

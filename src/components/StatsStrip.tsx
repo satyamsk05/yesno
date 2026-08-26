@@ -32,26 +32,32 @@ function CountUp({ target, duration = 1.8, format }: CountUpProps) {
   return <span ref={ref} className="tabular-nums">{format(count)}</span>;
 }
 
-export default function StatsStrip() {
+interface StatsStripProps {
+  totalVolume?: number;
+  activeTraders?: number;
+  resolvedMarkets?: number;
+}
+
+export default function StatsStrip({ totalVolume = 2482910, activeTraders = 12450, resolvedMarkets = 890 }: StatsStripProps) {
   const stats = [
     {
       label: "Total Volume Traded",
-      target: 2482910,
+      target: totalVolume,
       format: (val: number) =>
-        new Intl.NumberFormat("en-US", {
+        new Intl.NumberFormat("en-IN", {
           style: "currency",
-          currency: "USD",
+          currency: "INR",
           maximumFractionDigits: 0,
         }).format(val) + "+",
     },
     {
       label: "Active Traders",
-      target: 12450,
+      target: activeTraders,
       format: (val: number) => val.toLocaleString() + "+",
     },
     {
-      label: "Markets Resolved",
-      target: 890,
+      label: "Predictions Settled",
+      target: resolvedMarkets,
       format: (val: number) => val.toLocaleString(),
     },
   ];

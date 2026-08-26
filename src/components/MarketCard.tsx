@@ -6,17 +6,32 @@ import { motion } from "framer-motion";
 import confetti from "canvas-confetti";
 
 interface MarketCardProps {
-  price: number;
+  price: number | null;
   priceHistory: number[];
   priceDirection: "up" | "down" | null;
+  loading: boolean;
+  totalVolume?: number;
+  totalTraders?: number;
 }
 
-export default function MarketCard({ price, priceHistory, priceDirection }: MarketCardProps) {
+export default function MarketCard({ price, priceHistory, priceDirection, loading, totalVolume, totalTraders }: MarketCardProps) {
   // MOCK DATA - Countdown timer
   const [timeLeft, setTimeLeft] = useState({ hours: 2, minutes: 14, seconds: 45 });
   const [yesOdds, setYesOdds] = useState(58);
-  const [volume, setVolume] = useState(384120);
-  const [traders, setTraders] = useState(2450);
+  const [volume, setVolume] = useState(totalVolume ?? 384120);
+  const [traders, setTraders] = useState(totalTraders ?? 2450);
+
+  useEffect(() => {
+    if (totalVolume !== undefined && totalVolume > 0) {
+      setVolume(totalVolume);
+    }
+  }, [totalVolume]);
+
+  useEffect(() => {
+    if (totalTraders !== undefined && totalTraders > 0) {
+      setTraders(totalTraders);
+    }
+  }, [totalTraders]);
 
   // Countdown timer logic
   useEffect(() => {
@@ -40,7 +55,7 @@ export default function MarketCard({ price, priceHistory, priceDirection }: Mark
 
   // Update Yes/No probabilities and volume on price tick
   useEffect(() => {
-    if (priceDirection) {
+    if (priceDirection && price !== null) {
       // Simulate minor odds fluctuation based on price direction
       setYesOdds((prev) => {
         const change = priceDirection === "up" ? 1 : -1;
@@ -189,44 +204,50 @@ export default function MarketCard({ price, priceHistory, priceDirection }: Mark
 
             {/* Sparkline SVG */}
             <div className="w-full overflow-hidden h-[120px] sm:h-[160px] flex items-center justify-center">
-              <svg
-                viewBox={`0 0 ${chartWidth} ${chartHeight}`}
-                className="w-full h-full overflow-visible"
-                preserveAspectRatio="none"
-              >
-                <defs>
-                  <linearGradient id="greenGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#00D964" stopOpacity="0.2" />
-                    <stop offset="100%" stopColor="#00D964" stopOpacity="0" />
-                  </linearGradient>
-                  <linearGradient id="redGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#FF3B30" stopOpacity="0.2" />
-                    <stop offset="100%" stopColor="#FF3B30" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
+              {loading ? (
+                <div className="w-full h-full bg-gray-100/50 animate-pulse rounded-lg flex items-center justify-center border border-dashed border-brand-border">
+                  <span className="text-xs text-gray-400 font-semibold tracking-wider uppercase">Loading live price trend...</span>
+                </div>
+              ) : (
+                <svg
+                  viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+                  className="w-full h-full overflow-visible"
+                  preserveAspectRatio="none"
+                >
+                  <defs>
+                    <linearGradient id="greenGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#00D964" stopOpacity="0.2" />
+                      <stop offset="100%" stopColor="#00D964" stopOpacity="0" />
+                    </linearGradient>
+                    <linearGradient id="redGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#FF3B30" stopOpacity="0.2" />
+                      <stop offset="100%" stopColor="#FF3B30" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
 
-                {/* Shaded Area */}
-                {priceHistory.length > 0 && (
-                  <path
-                    d={getSvgFillPath()}
-                    fill={`url(#${fillColorId})`}
-                    className="transition-all duration-300 ease-in-out"
-                  />
-                )}
+                  {/* Shaded Area */}
+                  {priceHistory.length > 0 && (
+                    <path
+                      d={getSvgFillPath()}
+                      fill={`url(#${fillColorId})`}
+                      className="transition-all duration-300 ease-in-out"
+                    />
+                  )}
 
-                {/* Line Path */}
-                {priceHistory.length > 0 && (
-                  <motion.path
-                    d={getSvgPath()}
-                    fill="none"
-                    stroke={strokeColor}
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="transition-all duration-300 ease-in-out"
-                  />
-                )}
-              </svg>
+                  {/* Line Path */}
+                  {priceHistory.length > 0 && (
+                    <motion.path
+                      d={getSvgPath()}
+                      fill="none"
+                      stroke={strokeColor}
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="transition-all duration-300 ease-in-out"
+                    />
+                  )}
+                </svg>
+              )}
             </div>
           </div>
 

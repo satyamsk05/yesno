@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
-export default function TradePageRedirect() {
+export default function MarketIdRedirect() {
   const router = useRouter();
 
   useEffect(() => {
